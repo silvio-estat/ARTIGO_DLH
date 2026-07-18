@@ -1,0 +1,3 @@
+# Scripts bind-mounted into Linux containers must keep LF endings,
+# regardless of core.autocrlf on the checkout machine (see infra/minio/init-buckets.sh crash-loop).
+*.sh text eol=lf
