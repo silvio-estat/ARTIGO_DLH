@@ -1,0 +1,10 @@
+# ============================================================
+# PROT_DLH — Dependências Python (venv local)
+# Usado por: scripts/gerar_dados.py
+# (Airflow, Spark e demais libs de pipeline rodam nos containers Docker,
+#  não no venv local — ver infra/airflow/Dockerfile e infra/spark/Dockerfile)
+# ============================================================
+
+# --- Gerador de Dados Sintéticos ---
+faker==25.0.0                   # Geração de dados sintéticos
+minio==7.2.7                    # MinIO Python SDK (upload para o bucket landing/)

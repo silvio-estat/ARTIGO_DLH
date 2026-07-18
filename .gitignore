@@ -1,0 +1,14 @@
+# Claude Code
+CLAUDE.md
+.claude/
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Secrets / local config
+.env
+
+# Docker volumes / local data
+*.log
