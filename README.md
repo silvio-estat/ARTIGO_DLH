@@ -132,7 +132,7 @@ docker exec dlh_airflow_webserver airflow dags trigger dag_trino_governance
 
 OpenMetadata fica em http://localhost:8585 (`admin@open-metadata.org` / `admin`).
 
-**Testes de qualidade (data quality):** nenhum test suite é criado automaticamente por nada no código. A task `data_quality` só executa test suites que já existirem no catálogo — se não existir nenhum, ela roda e não faz nada (sem erro, mas sem testar nada). Para configurar um teste, use a UI do OpenMetadata (Data Quality → Add Test) ou a API REST (`POST /api/v1/dataQuality/testSuites/basic` + `POST /api/v1/dataQuality/testCases`, apontando `entityLink` para a coluna desejada).
+**Testes de qualidade (data quality):** a task `data_quality` só executa test suites que já existirem no catálogo — sozinha, ela não cria teste nenhum. Rode `python scripts/setup_om_quality_tests.py` (mesmos pré-requisitos do `setup_om_bot_token.py`, mais a `dag_trino_governance` já ter feito a ingestão de metadados ao menos uma vez, senão as tabelas ainda não existem no catálogo do OM) para recriar os 5 testes exemplares usados no artigo — validade (`relt_intel.confiabilidade`, `paf.status_execucao`), acurácia (`material.nivel_combustivel_pct`), completude (`relt_intel.batalhao_origem`) e unicidade (`relt_intel.id_relatorio`) — de forma idempotente e reprodutível. Depois, dispare `dag_trino_governance` de novo (ou rode só a task `data_quality`) para executá-los.
 
 ### 6. Notebook de exemplo — consultas via Trino
 

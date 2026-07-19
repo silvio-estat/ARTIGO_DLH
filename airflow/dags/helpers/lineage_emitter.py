@@ -410,14 +410,18 @@ sensores AS (
 ameacas AS (
     SELECT batalhao_origem,
            COUNT(*) AS total_ameacas,
-           SUM(CASE WHEN confiabilidade IN ('A','B') THEN 1 ELSE 0 END) AS ameacas_alta_confiabilidade,
+           SUM(CASE WHEN substr(confiabilidade, 1, 1) IN ('A','B') THEN 1 ELSE 0 END) AS ameacas_alta_confiabilidade,
            SUM(efetivo_estimado) AS efetivo_inimigo_estimado,
            MAX(timestamp_geracao) AS ts_ultimo_intel
     FROM lakehouse.silver.relt_intel GROUP BY batalhao_origem
 ),
 ocorrencias AS (
     SELECT batalhao_origem,
-           MAX(nivel_ameaca) AS nivel_ameaca_max,
+           CASE MAX(CASE nivel_ameaca
+                        WHEN 'CRITICO' THEN 4 WHEN 'ALTO' THEN 3
+                        WHEN 'MEDIO' THEN 2 WHEN 'BAIXO' THEN 1 ELSE 0 END)
+                WHEN 4 THEN 'CRITICO' WHEN 3 THEN 'ALTO'
+                WHEN 2 THEN 'MEDIO' WHEN 1 THEN 'BAIXO' END AS nivel_ameaca_max,
            COUNT(*) AS total_ocorrencias_seg,
            SUM(baixas_proprias) AS baixas_proprias_seg
     FROM lakehouse.silver.seg_area GROUP BY batalhao_origem
@@ -500,7 +504,7 @@ situacao_inimigo AS (
     SELECT batalhao_origem,
            COUNT(*) AS relatorios_intel,
            SUM(efetivo_estimado) AS efetivo_inimigo_total,
-           SUM(CASE WHEN confiabilidade IN ('A','B') THEN 1 ELSE 0 END) AS intel_confirmada
+           SUM(CASE WHEN substr(confiabilidade, 1, 1) IN ('A','B') THEN 1 ELSE 0 END) AS intel_confirmada
     FROM lakehouse.silver.relt_intel GROUP BY batalhao_origem
 ),
 terreno_restricoes AS (
