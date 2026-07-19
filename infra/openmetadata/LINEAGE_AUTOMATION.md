@@ -63,7 +63,7 @@ spark.openlineage.transport.type=http
 spark.openlineage.transport.url=http://openmetadata:8585
 spark.openlineage.transport.endpoint=/api/v1/lineage/openlineage
 spark.openlineage.namespace=dlh
-spark.openlineage.appName=prot_dlh
+spark.openlineage.appName=lakehouse_c2
 ```
 
 > O endpoint `/api/v1/lineage/openlineage` é o receiver OpenLineage nativo do OM ≥ 1.5.0.

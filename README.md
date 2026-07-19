@@ -1,6 +1,6 @@
-# Lakehouse C2 — ARQ_TEMAC
+# Uma Arquitetura Data Lakehouse Open-Source para o Exército Brasileiro no contexto de Comando e Controle no Nível Brigada
 
-Protótipo de pesquisa (dissertação de mestrado, codinome **ARQ_TEMAC**) que implementa uma plataforma Lakehouse — MinIO (S3) + Apache Iceberg + Hive Metastore + Spark + Trino + Airflow, com OpenMetadata para governança/catálogo/linhagem — para um sistema de C2 (comando e controle) do Exército Brasileiro.
+Protótipo que implementa uma plataforma Lakehouse — MinIO (S3) + Apache Iceberg + Hive Metastore + Spark + Trino + Airflow, com OpenMetadata para governança/catálogo/linhagem — para um sistema de C2 (comando e controle) do Exército Brasileiro.
 
 ## Índice
 
