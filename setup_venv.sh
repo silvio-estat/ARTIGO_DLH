@@ -9,7 +9,7 @@ set -e
 VENV_DIR="venv"
 PYTHON_MIN="3.10"
 
-echo "=== PROT_DLH — Setup do ambiente virtual ==="
+echo "=== Setup do ambiente virtual ==="
 
 # Localiza um interpretador válido — python3 no Linux/macOS, python no Windows/Git Bash
 PYTHON=""

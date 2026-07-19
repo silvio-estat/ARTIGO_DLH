@@ -9,7 +9,7 @@ $ErrorActionPreference = "Stop"
 $VenvDir = "venv"
 $PythonMin = [version]"3.10"
 
-Write-Host "=== PROT_DLH — Setup do ambiente virtual ==="
+Write-Host "=== Setup do ambiente virtual ==="
 
 $PythonCmd = Get-Command python -ErrorAction SilentlyContinue
 if (-not $PythonCmd) {

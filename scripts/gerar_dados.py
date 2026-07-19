@@ -1,5 +1,5 @@
 """
-Gerador de Dados Sintéticos — PROT_DLH
+Gerador de Dados Sintéticos
 Gera lotes de dados GPS, SITREP e Sensor (drone) e envia para MinIO 'landing/'.
 
 Cada batalhão tem subunidades com pools fixos de veículos e drones,
@@ -342,7 +342,7 @@ def upload_lote(client: Minio, tipo: str, registros: list[dict], lote: int):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Gerador de dados sinteticos para PROT_DLH")
+    parser = argparse.ArgumentParser(description="Gerador de dados sinteticos")
     parser.add_argument("--tipo", choices=list(GERADORES.keys()) + ["todos"],
                         default="todos", help="Tipo de dado a gerar")
     parser.add_argument("--lotes", type=int, default=10, help="Numero de lotes por tipo")

@@ -25,7 +25,7 @@ OM_URL = os.environ.get("OPENMETADATA_URL", "http://openmetadata:8585")
 OM_OL_ENDPOINT = f"{OM_URL}/api/v1/openlineage/lineage"
 OM_JWT = os.environ.get("OM_INGESTION_BOT_JWT", "")
 OL_NAMESPACE = "dlh"
-OL_PRODUCER = "https://github.com/PROT_DLH/lineage_emitter"
+OL_PRODUCER = "https://github.com/ARQ_TEMAC/lineage_emitter"
 OL_SCHEMA_URL = "https://openlineage.io/spec/2-0-2/OpenLineage.json#/$defs/RunEvent"
 _FACET_PRODUCER = OL_PRODUCER
 _COL_LINEAGE_SCHEMA = "https://openlineage.io/spec/facets/1-0-2/ColumnLineageDatasetFacet.json#/$defs/ColumnLineageDatasetFacet"
@@ -38,23 +38,33 @@ _SQL_SCHEMA = "https://openlineage.io/spec/facets/1-0-1/SQLJobFacet.json#/$defs/
 
 _GPS_SQL = """MERGE INTO lakehouse.silver.gps AS target
 USING (
-    SELECT
-        get_json_object(payload, '$.id_veiculo') AS id_registro,
-        batalhao_origem,
-        CAST(NULL AS STRING) AS subunidade,
-        CAST(get_json_object(payload, '$.latitude') AS DOUBLE) AS latitude,
-        CAST(get_json_object(payload, '$.longitude') AS DOUBLE) AS longitude,
-        CAST(get_json_object(payload, '$.altitude_m') AS DOUBLE) AS altitude,
-        CAST(get_json_object(payload, '$.velocidade_kmh') AS DOUBLE) AS velocidade,
-        CAST(get_json_object(payload, '$.direcao_graus') AS DOUBLE) AS direcao,
-        timestamp_geracao, timestamp_chegada, id_lote,
-        CAST(unix_timestamp(timestamp_chegada) - unix_timestamp(timestamp_geracao) AS DOUBLE) AS latencia_ingestao_s,
-        timestamp_geracao > timestamp_chegada AS fora_de_ordem,
-        current_timestamp() AS processado_em
-    FROM lakehouse.bronze.dados
-    WHERE tipo_dado = 'gps'
-      AND CAST(get_json_object(payload, '$.latitude') AS DOUBLE) BETWEEN -90 AND 90
-      AND CAST(get_json_object(payload, '$.longitude') AS DOUBLE) BETWEEN -180 AND 180
+    SELECT id_registro, batalhao_origem, subunidade, latitude, longitude, altitude,
+           velocidade, direcao, timestamp_geracao, timestamp_chegada, id_lote,
+           latencia_ingestao_s, fora_de_ordem, processado_em
+    FROM (
+        SELECT
+            get_json_object(payload, '$.id_veiculo') AS id_registro,
+            batalhao_origem,
+            CAST(NULL AS STRING) AS subunidade,
+            CAST(get_json_object(payload, '$.latitude') AS DOUBLE) AS latitude,
+            CAST(get_json_object(payload, '$.longitude') AS DOUBLE) AS longitude,
+            CAST(get_json_object(payload, '$.altitude_m') AS DOUBLE) AS altitude,
+            CAST(get_json_object(payload, '$.velocidade_kmh') AS DOUBLE) AS velocidade,
+            CAST(get_json_object(payload, '$.direcao_graus') AS DOUBLE) AS direcao,
+            timestamp_geracao, timestamp_chegada, id_lote,
+            CAST(unix_timestamp(timestamp_chegada) - unix_timestamp(timestamp_geracao) AS DOUBLE) AS latencia_ingestao_s,
+            timestamp_geracao > timestamp_chegada AS fora_de_ordem,
+            current_timestamp() AS processado_em,
+            ROW_NUMBER() OVER (
+                PARTITION BY get_json_object(payload, '$.id_veiculo'), timestamp_geracao
+                ORDER BY timestamp_chegada DESC
+            ) AS rn
+        FROM lakehouse.bronze.dados
+        WHERE tipo_dado = 'gps'
+          AND CAST(get_json_object(payload, '$.latitude') AS DOUBLE) BETWEEN -90 AND 90
+          AND CAST(get_json_object(payload, '$.longitude') AS DOUBLE) BETWEEN -180 AND 180
+    )
+    WHERE rn = 1
 ) AS source
 ON target.id_registro = source.id_registro
 WHEN NOT MATCHED THEN INSERT *"""
@@ -62,155 +72,228 @@ WHEN NOT MATCHED THEN INSERT *"""
 
 _SENSOR_SQL = """MERGE INTO lakehouse.silver.sensor AS target
 USING (
-    SELECT
-        get_json_object(payload, '$.id_sensor') AS id_registro,
-        batalhao_origem,
-        CAST(NULL AS STRING) AS drone_id, CAST(NULL AS STRING) AS area_cobertura,
-        CAST(NULL AS DOUBLE) AS latitude_centro, CAST(NULL AS DOUBLE) AS longitude_centro,
-        CAST(NULL AS DOUBLE) AS raio_km, CAST(NULL AS DOUBLE) AS altitude_voo,
-        CAST(NULL AS INTEGER) AS bateria_pct, CAST(NULL AS STRING) AS status_missao,
-        timestamp_geracao, timestamp_chegada, id_lote,
-        CAST(unix_timestamp(timestamp_chegada) - unix_timestamp(timestamp_geracao) AS DOUBLE) AS latencia_ingestao_s,
-        timestamp_geracao > timestamp_chegada AS fora_de_ordem,
-        current_timestamp() AS processado_em
-    FROM lakehouse.bronze.dados
-    WHERE tipo_dado = 'sensor'
+    SELECT id_registro, batalhao_origem, drone_id, area_cobertura, latitude_centro,
+           longitude_centro, raio_km, altitude_voo, bateria_pct, status_missao,
+           timestamp_geracao, timestamp_chegada, id_lote, latencia_ingestao_s,
+           fora_de_ordem, processado_em
+    FROM (
+        SELECT
+            get_json_object(payload, '$.id_sensor') AS id_registro,
+            batalhao_origem,
+            CAST(NULL AS STRING) AS drone_id, CAST(NULL AS STRING) AS area_cobertura,
+            CAST(NULL AS DOUBLE) AS latitude_centro, CAST(NULL AS DOUBLE) AS longitude_centro,
+            CAST(NULL AS DOUBLE) AS raio_km, CAST(NULL AS DOUBLE) AS altitude_voo,
+            CAST(NULL AS INTEGER) AS bateria_pct, CAST(NULL AS STRING) AS status_missao,
+            timestamp_geracao, timestamp_chegada, id_lote,
+            CAST(unix_timestamp(timestamp_chegada) - unix_timestamp(timestamp_geracao) AS DOUBLE) AS latencia_ingestao_s,
+            timestamp_geracao > timestamp_chegada AS fora_de_ordem,
+            current_timestamp() AS processado_em,
+            ROW_NUMBER() OVER (
+                PARTITION BY get_json_object(payload, '$.id_sensor')
+                ORDER BY timestamp_chegada DESC
+            ) AS rn
+        FROM lakehouse.bronze.dados
+        WHERE tipo_dado = 'sensor'
+    )
+    WHERE rn = 1
 ) AS source
 ON target.id_registro = source.id_registro
 WHEN NOT MATCHED THEN INSERT *"""
 
 _MATERIAL_SQL = """INSERT INTO lakehouse.silver.material
-SELECT
-    get_json_object(payload, '$.id_viatura')                              AS id_viatura,
-    batalhao_origem,
-    get_json_object(payload, '$.subunidade')                              AS subunidade,
-    get_json_object(payload, '$.tipo_viatura')                            AS tipo_viatura,
-    get_json_object(payload, '$.status_viatura')                          AS status_viatura,
-    CAST(get_json_object(payload, '$.nivel_combustivel_pct') AS INTEGER)  AS nivel_combustivel_pct,
-    CAST(get_json_object(payload, '$.km_rodados') AS INTEGER)             AS km_rodados,
-    CAST(get_json_object(payload, '$.proxima_manutencao_km') AS INTEGER)  AS proxima_manutencao_km,
-    timestamp_geracao, timestamp_chegada, id_lote,
-    CAST(unix_timestamp(timestamp_chegada) - unix_timestamp(timestamp_geracao) AS DOUBLE) AS latencia_ingestao_s,
-    timestamp_geracao > timestamp_chegada AS fora_de_ordem,
-    current_timestamp() AS processado_em
-FROM lakehouse.bronze.dados src
-WHERE tipo_dado = 'material'
+SELECT id_viatura, batalhao_origem, subunidade, tipo_viatura, status_viatura,
+       nivel_combustivel_pct, km_rodados, proxima_manutencao_km, timestamp_geracao,
+       timestamp_chegada, id_lote, latencia_ingestao_s, fora_de_ordem, processado_em
+FROM (
+    SELECT
+        get_json_object(payload, '$.id_viatura')                              AS id_viatura,
+        batalhao_origem,
+        get_json_object(payload, '$.subunidade')                              AS subunidade,
+        get_json_object(payload, '$.tipo_viatura')                            AS tipo_viatura,
+        get_json_object(payload, '$.status_viatura')                          AS status_viatura,
+        CAST(get_json_object(payload, '$.nivel_combustivel_pct') AS INTEGER)  AS nivel_combustivel_pct,
+        CAST(get_json_object(payload, '$.km_rodados') AS INTEGER)             AS km_rodados,
+        CAST(get_json_object(payload, '$.proxima_manutencao_km') AS INTEGER)  AS proxima_manutencao_km,
+        timestamp_geracao, timestamp_chegada, id_lote,
+        CAST(unix_timestamp(timestamp_chegada) - unix_timestamp(timestamp_geracao) AS DOUBLE) AS latencia_ingestao_s,
+        timestamp_geracao > timestamp_chegada AS fora_de_ordem,
+        current_timestamp() AS processado_em,
+        ROW_NUMBER() OVER (
+            PARTITION BY get_json_object(payload, '$.id_viatura'), timestamp_geracao
+            ORDER BY timestamp_chegada DESC
+        ) AS rn
+    FROM lakehouse.bronze.dados
+    WHERE tipo_dado = 'material'
+) src
+WHERE rn = 1
   AND NOT EXISTS (
       SELECT 1 FROM lakehouse.silver.material tgt
-      WHERE tgt.id_viatura        = get_json_object(src.payload, '$.id_viatura')
+      WHERE tgt.id_viatura        = src.id_viatura
         AND tgt.timestamp_geracao = src.timestamp_geracao
   )"""
 
 _RELT_INTEL_SQL = """MERGE INTO lakehouse.silver.relt_intel AS target
 USING (
-    SELECT
-        get_json_object(payload, '$.id_relatorio')                      AS id_relatorio,
-        batalhao_origem,
-        get_json_object(payload, '$.subunidade')                        AS subunidade,
-        get_json_object(payload, '$.tipo_ameaca')                       AS tipo_ameaca,
-        CAST(get_json_object(payload, '$.coordenada_lat') AS DOUBLE)    AS coordenada_lat,
-        CAST(get_json_object(payload, '$.coordenada_lon') AS DOUBLE)    AS coordenada_lon,
-        CAST(get_json_object(payload, '$.efetivo_estimado') AS INTEGER) AS efetivo_estimado,
-        get_json_object(payload, '$.confiabilidade')                    AS confiabilidade,
-        get_json_object(payload, '$.fonte_info')                        AS fonte_info,
-        get_json_object(payload, '$.descricao')                         AS descricao,
-        timestamp_geracao, timestamp_chegada, id_lote,
-        CAST(unix_timestamp(timestamp_chegada) - unix_timestamp(timestamp_geracao) AS DOUBLE) AS latencia_ingestao_s,
-        current_timestamp() AS processado_em
-    FROM lakehouse.bronze.dados
-    WHERE tipo_dado = 'relt_intel'
+    SELECT id_relatorio, batalhao_origem, subunidade, tipo_ameaca, coordenada_lat,
+           coordenada_lon, efetivo_estimado, confiabilidade, fonte_info, descricao,
+           timestamp_geracao, timestamp_chegada, id_lote, latencia_ingestao_s, processado_em
+    FROM (
+        SELECT
+            get_json_object(payload, '$.id_relatorio')                      AS id_relatorio,
+            batalhao_origem,
+            get_json_object(payload, '$.subunidade')                        AS subunidade,
+            get_json_object(payload, '$.tipo_ameaca')                       AS tipo_ameaca,
+            CAST(get_json_object(payload, '$.coordenada_lat') AS DOUBLE)    AS coordenada_lat,
+            CAST(get_json_object(payload, '$.coordenada_lon') AS DOUBLE)    AS coordenada_lon,
+            CAST(get_json_object(payload, '$.efetivo_estimado') AS INTEGER) AS efetivo_estimado,
+            get_json_object(payload, '$.confiabilidade')                    AS confiabilidade,
+            get_json_object(payload, '$.fonte_info')                        AS fonte_info,
+            get_json_object(payload, '$.descricao')                         AS descricao,
+            timestamp_geracao, timestamp_chegada, id_lote,
+            CAST(unix_timestamp(timestamp_chegada) - unix_timestamp(timestamp_geracao) AS DOUBLE) AS latencia_ingestao_s,
+            current_timestamp() AS processado_em,
+            ROW_NUMBER() OVER (
+                PARTITION BY get_json_object(payload, '$.id_relatorio')
+                ORDER BY timestamp_chegada DESC
+            ) AS rn
+        FROM lakehouse.bronze.dados
+        WHERE tipo_dado = 'relt_intel'
+    )
+    WHERE rn = 1
 ) AS source
 ON target.id_relatorio = source.id_relatorio
 WHEN NOT MATCHED THEN INSERT *"""
 
 _PAF_SQL = """MERGE INTO lakehouse.silver.paf AS target
 USING (
-    SELECT
-        get_json_object(payload, '$.id_paf')                              AS id_paf,
-        batalhao_origem,
-        get_json_object(payload, '$.subunidade')                          AS subunidade,
-        get_json_object(payload, '$.tipo_missao')                         AS tipo_missao,
-        CAST(get_json_object(payload, '$.coordenada_alvo_lat') AS DOUBLE) AS coordenada_alvo_lat,
-        CAST(get_json_object(payload, '$.coordenada_alvo_lon') AS DOUBLE) AS coordenada_alvo_lon,
-        get_json_object(payload, '$.tipo_alvo')                           AS tipo_alvo,
-        get_json_object(payload, '$.tipo_municao')                        AS tipo_municao,
-        get_json_object(payload, '$.prioridade')                          AS prioridade,
-        get_json_object(payload, '$.status_execucao')                     AS status_execucao,
-        timestamp_geracao, timestamp_chegada, id_lote,
-        CAST(unix_timestamp(timestamp_chegada) - unix_timestamp(timestamp_geracao) AS DOUBLE) AS latencia_ingestao_s,
-        current_timestamp() AS processado_em
-    FROM lakehouse.bronze.dados
-    WHERE tipo_dado = 'paf'
+    SELECT id_paf, batalhao_origem, subunidade, tipo_missao, coordenada_alvo_lat,
+           coordenada_alvo_lon, tipo_alvo, tipo_municao, prioridade, status_execucao,
+           timestamp_geracao, timestamp_chegada, id_lote, latencia_ingestao_s, processado_em
+    FROM (
+        SELECT
+            get_json_object(payload, '$.id_paf')                              AS id_paf,
+            batalhao_origem,
+            get_json_object(payload, '$.subunidade')                          AS subunidade,
+            get_json_object(payload, '$.tipo_missao')                         AS tipo_missao,
+            CAST(get_json_object(payload, '$.coordenada_alvo_lat') AS DOUBLE) AS coordenada_alvo_lat,
+            CAST(get_json_object(payload, '$.coordenada_alvo_lon') AS DOUBLE) AS coordenada_alvo_lon,
+            get_json_object(payload, '$.tipo_alvo')                           AS tipo_alvo,
+            get_json_object(payload, '$.tipo_municao')                        AS tipo_municao,
+            get_json_object(payload, '$.prioridade')                          AS prioridade,
+            get_json_object(payload, '$.status_execucao')                     AS status_execucao,
+            timestamp_geracao, timestamp_chegada, id_lote,
+            CAST(unix_timestamp(timestamp_chegada) - unix_timestamp(timestamp_geracao) AS DOUBLE) AS latencia_ingestao_s,
+            current_timestamp() AS processado_em,
+            ROW_NUMBER() OVER (
+                PARTITION BY get_json_object(payload, '$.id_paf')
+                ORDER BY timestamp_chegada DESC
+            ) AS rn
+        FROM lakehouse.bronze.dados
+        WHERE tipo_dado = 'paf'
+    )
+    WHERE rn = 1
 ) AS source
 ON target.id_paf = source.id_paf
 WHEN NOT MATCHED THEN INSERT *"""
 
 _OBSTACULO_SQL = """MERGE INTO lakehouse.silver.obstaculo AS target
 USING (
-    SELECT
-        get_json_object(payload, '$.id_obstaculo')                           AS id_obstaculo,
-        batalhao_origem,
-        get_json_object(payload, '$.subunidade')                             AS subunidade,
-        get_json_object(payload, '$.tipo_obstaculo')                         AS tipo_obstaculo,
-        CAST(get_json_object(payload, '$.coordenada_lat') AS DOUBLE)         AS coordenada_lat,
-        CAST(get_json_object(payload, '$.coordenada_lon') AS DOUBLE)         AS coordenada_lon,
-        get_json_object(payload, '$.transitabilidade')                       AS transitabilidade,
-        CAST(get_json_object(payload, '$.coberto_fogo') AS BOOLEAN)          AS coberto_fogo,
-        CAST(get_json_object(payload, '$.largura_m') AS DOUBLE)              AS largura_m,
-        CAST(get_json_object(payload, '$.confirmado_engenharia') AS BOOLEAN) AS confirmado_engenharia,
-        timestamp_geracao, timestamp_chegada, id_lote,
-        CAST(unix_timestamp(timestamp_chegada) - unix_timestamp(timestamp_geracao) AS DOUBLE) AS latencia_ingestao_s,
-        current_timestamp() AS processado_em
-    FROM lakehouse.bronze.dados
-    WHERE tipo_dado = 'obstaculo'
+    SELECT id_obstaculo, batalhao_origem, subunidade, tipo_obstaculo, coordenada_lat,
+           coordenada_lon, transitabilidade, coberto_fogo, largura_m, confirmado_engenharia,
+           timestamp_geracao, timestamp_chegada, id_lote, latencia_ingestao_s, processado_em
+    FROM (
+        SELECT
+            get_json_object(payload, '$.id_obstaculo')                           AS id_obstaculo,
+            batalhao_origem,
+            get_json_object(payload, '$.subunidade')                             AS subunidade,
+            get_json_object(payload, '$.tipo_obstaculo')                         AS tipo_obstaculo,
+            CAST(get_json_object(payload, '$.coordenada_lat') AS DOUBLE)         AS coordenada_lat,
+            CAST(get_json_object(payload, '$.coordenada_lon') AS DOUBLE)         AS coordenada_lon,
+            get_json_object(payload, '$.transitabilidade')                       AS transitabilidade,
+            CAST(get_json_object(payload, '$.coberto_fogo') AS BOOLEAN)          AS coberto_fogo,
+            CAST(get_json_object(payload, '$.largura_m') AS DOUBLE)              AS largura_m,
+            CAST(get_json_object(payload, '$.confirmado_engenharia') AS BOOLEAN) AS confirmado_engenharia,
+            timestamp_geracao, timestamp_chegada, id_lote,
+            CAST(unix_timestamp(timestamp_chegada) - unix_timestamp(timestamp_geracao) AS DOUBLE) AS latencia_ingestao_s,
+            current_timestamp() AS processado_em,
+            ROW_NUMBER() OVER (
+                PARTITION BY get_json_object(payload, '$.id_obstaculo')
+                ORDER BY timestamp_chegada DESC
+            ) AS rn
+        FROM lakehouse.bronze.dados
+        WHERE tipo_dado = 'obstaculo'
+    )
+    WHERE rn = 1
 ) AS source
 ON target.id_obstaculo = source.id_obstaculo
 WHEN NOT MATCHED THEN INSERT *"""
 
 _SEG_AREA_SQL = """MERGE INTO lakehouse.silver.seg_area AS target
 USING (
-    SELECT
-        get_json_object(payload, '$.id_ocorrencia')                              AS id_ocorrencia,
-        batalhao_origem,
-        get_json_object(payload, '$.subunidade')                                 AS subunidade,
-        get_json_object(payload, '$.tipo_ocorrencia')                            AS tipo_ocorrencia,
-        CAST(get_json_object(payload, '$.coordenada_lat') AS DOUBLE)             AS coordenada_lat,
-        CAST(get_json_object(payload, '$.coordenada_lon') AS DOUBLE)             AS coordenada_lon,
-        CAST(get_json_object(payload, '$.efetivo_proprio_envolvido') AS INTEGER) AS efetivo_proprio_envolvido,
-        CAST(get_json_object(payload, '$.baixas_proprias') AS INTEGER)           AS baixas_proprias,
-        CAST(get_json_object(payload, '$.baixas_inimigas') AS INTEGER)           AS baixas_inimigas,
-        get_json_object(payload, '$.nivel_ameaca')                               AS nivel_ameaca,
-        get_json_object(payload, '$.status_resolucao')                           AS status_resolucao,
-        timestamp_geracao, timestamp_chegada, id_lote,
-        CAST(unix_timestamp(timestamp_chegada) - unix_timestamp(timestamp_geracao) AS DOUBLE) AS latencia_ingestao_s,
-        current_timestamp() AS processado_em
-    FROM lakehouse.bronze.dados
-    WHERE tipo_dado = 'seg_area'
+    SELECT id_ocorrencia, batalhao_origem, subunidade, tipo_ocorrencia, coordenada_lat,
+           coordenada_lon, efetivo_proprio_envolvido, baixas_proprias, baixas_inimigas,
+           nivel_ameaca, status_resolucao, timestamp_geracao, timestamp_chegada, id_lote,
+           latencia_ingestao_s, processado_em
+    FROM (
+        SELECT
+            get_json_object(payload, '$.id_ocorrencia')                              AS id_ocorrencia,
+            batalhao_origem,
+            get_json_object(payload, '$.subunidade')                                 AS subunidade,
+            get_json_object(payload, '$.tipo_ocorrencia')                            AS tipo_ocorrencia,
+            CAST(get_json_object(payload, '$.coordenada_lat') AS DOUBLE)             AS coordenada_lat,
+            CAST(get_json_object(payload, '$.coordenada_lon') AS DOUBLE)             AS coordenada_lon,
+            CAST(get_json_object(payload, '$.efetivo_proprio_envolvido') AS INTEGER) AS efetivo_proprio_envolvido,
+            CAST(get_json_object(payload, '$.baixas_proprias') AS INTEGER)           AS baixas_proprias,
+            CAST(get_json_object(payload, '$.baixas_inimigas') AS INTEGER)           AS baixas_inimigas,
+            get_json_object(payload, '$.nivel_ameaca')                               AS nivel_ameaca,
+            get_json_object(payload, '$.status_resolucao')                           AS status_resolucao,
+            timestamp_geracao, timestamp_chegada, id_lote,
+            CAST(unix_timestamp(timestamp_chegada) - unix_timestamp(timestamp_geracao) AS DOUBLE) AS latencia_ingestao_s,
+            current_timestamp() AS processado_em,
+            ROW_NUMBER() OVER (
+                PARTITION BY get_json_object(payload, '$.id_ocorrencia')
+                ORDER BY timestamp_chegada DESC
+            ) AS rn
+        FROM lakehouse.bronze.dados
+        WHERE tipo_dado = 'seg_area'
+    )
+    WHERE rn = 1
 ) AS source
 ON target.id_ocorrencia = source.id_ocorrencia
 WHEN NOT MATCHED THEN INSERT *"""
 
 _PESSOAL_SQL = """INSERT INTO lakehouse.silver.pessoal
-SELECT
-    get_json_object(payload, '$.id_relatorio')                        AS id_relatorio,
-    batalhao_origem,
-    get_json_object(payload, '$.subunidade')                          AS subunidade,
-    get_json_object(payload, '$.situacao_operacional')                AS situacao_operacional,
-    CAST(get_json_object(payload, '$.efetivo_organico') AS INTEGER)   AS efetivo_organico,
-    CAST(get_json_object(payload, '$.efetivo_presente') AS INTEGER)   AS efetivo_presente,
-    CAST(get_json_object(payload, '$.baixas_combate') AS INTEGER)     AS baixas_combate,
-    CAST(get_json_object(payload, '$.baixas_nao_combate') AS INTEGER) AS baixas_nao_combate,
-    CAST(get_json_object(payload, '$.evacuados') AS INTEGER)          AS evacuados,
-    get_json_object(payload, '$.necessidade_prioritaria')             AS necessidade_prioritaria,
-    get_json_object(payload, '$.necessidade_logistica')               AS necessidade_logistica,
-    timestamp_geracao, timestamp_chegada, id_lote,
-    CAST(unix_timestamp(timestamp_chegada) - unix_timestamp(timestamp_geracao) AS DOUBLE) AS latencia_ingestao_s,
-    current_timestamp() AS processado_em
-FROM lakehouse.bronze.dados src
-WHERE tipo_dado = 'pessoal'
+SELECT id_relatorio, batalhao_origem, subunidade, situacao_operacional, efetivo_organico,
+       efetivo_presente, baixas_combate, baixas_nao_combate, evacuados, necessidade_prioritaria,
+       necessidade_logistica, timestamp_geracao, timestamp_chegada, id_lote,
+       latencia_ingestao_s, processado_em
+FROM (
+    SELECT
+        get_json_object(payload, '$.id_relatorio')                        AS id_relatorio,
+        batalhao_origem,
+        get_json_object(payload, '$.subunidade')                          AS subunidade,
+        get_json_object(payload, '$.situacao_operacional')                AS situacao_operacional,
+        CAST(get_json_object(payload, '$.efetivo_organico') AS INTEGER)   AS efetivo_organico,
+        CAST(get_json_object(payload, '$.efetivo_presente') AS INTEGER)   AS efetivo_presente,
+        CAST(get_json_object(payload, '$.baixas_combate') AS INTEGER)     AS baixas_combate,
+        CAST(get_json_object(payload, '$.baixas_nao_combate') AS INTEGER) AS baixas_nao_combate,
+        CAST(get_json_object(payload, '$.evacuados') AS INTEGER)          AS evacuados,
+        get_json_object(payload, '$.necessidade_prioritaria')             AS necessidade_prioritaria,
+        get_json_object(payload, '$.necessidade_logistica')               AS necessidade_logistica,
+        timestamp_geracao, timestamp_chegada, id_lote,
+        CAST(unix_timestamp(timestamp_chegada) - unix_timestamp(timestamp_geracao) AS DOUBLE) AS latencia_ingestao_s,
+        current_timestamp() AS processado_em,
+        ROW_NUMBER() OVER (
+            PARTITION BY get_json_object(payload, '$.id_relatorio')
+            ORDER BY timestamp_chegada DESC
+        ) AS rn
+    FROM lakehouse.bronze.dados
+    WHERE tipo_dado = 'pessoal'
+) src
+WHERE rn = 1
   AND NOT EXISTS (
       SELECT 1 FROM lakehouse.silver.pessoal tgt
-      WHERE tgt.id_relatorio = get_json_object(src.payload, '$.id_relatorio')
+      WHERE tgt.id_relatorio = src.id_relatorio
   )"""
 
 _BRONZE = "lakehouse.bronze.dados"
@@ -924,10 +1007,12 @@ def emit_lineage(
     ok = _send_event(_build_event(inputs, outputs, job_name, sql_facet, output_facets))
 
     # Para jobs com múltiplos inputs e SQL, emite um evento por input para que
-    # o OM associe o SQL à aresta individual (limitação do OM 1.12.5 com multi-input)
+    # o OM associe o SQL à aresta individual (limitação do OM 1.12.5 com multi-input).
+    # Reenvia também o column lineage completo — senão esse evento por-input
+    # sobrescreve a aresta do evento combinado e apaga o columnLineage dela.
     if sql and len(inputs) > 1:
         for inp in inputs:
-            _send_event(_build_event([inp], outputs, f"{job_name}.{inp.split('.')[-1]}", sql_facet, {}))
+            _send_event(_build_event([inp], outputs, f"{job_name}.{inp.split('.')[-1]}", sql_facet, output_facets))
 
     return ok
 

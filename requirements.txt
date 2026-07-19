@@ -1,6 +1,6 @@
 # ============================================================
-# PROT_DLH — Dependências Python (venv local)
-# Usado por: scripts/gerar_dados.py
+# Dependências Python (venv local)
+# Usado por: scripts/gerar_dados.py, exemplo_consulta_trino/*.ipynb
 # (Airflow, Spark e demais libs de pipeline rodam nos containers Docker,
 #  não no venv local — ver infra/airflow/Dockerfile e infra/spark/Dockerfile)
 # ============================================================
@@ -8,3 +8,9 @@
 # --- Gerador de Dados Sintéticos ---
 faker==25.0.0                   # Geração de dados sintéticos
 minio==7.2.7                    # MinIO Python SDK (upload para o bucket landing/)
+
+# --- Notebooks de consulta (exemplo_consulta_trino/) ---
+trino==0.328.0                  # Cliente Python para consultas ao Trino (iceberg.gold.*)
+pandas==2.2.3                   # DataFrames para análise local (download + pandas) — 2.2.2 não tem wheel para Python 3.13
+matplotlib==3.9.2                # Gráficos — mesmo motivo, precisa de wheel pronta pro Python 3.13
+jupyterlab==4.2.5               # Ambiente para abrir/rodar os notebooks

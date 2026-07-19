@@ -20,15 +20,32 @@ TRINO_URL = "http://trino:8090"
 SAMPLE_LIMIT = 50
 
 
+def _require_bot_jwt() -> str:
+    """Lê OM_INGESTION_BOT_JWT do ambiente ou falha com instrução de como gerá-lo.
+
+    O token não pode ser fixado no repo (é gerado por instância do OpenMetadata) —
+    rode `python scripts/setup_om_bot_token.py` com o perfil governance no ar
+    para buscá-lo automaticamente via API e gravá-lo em .env.
+    """
+    jwt = os.environ.get("OM_INGESTION_BOT_JWT", "")
+    if not jwt:
+        raise ValueError(
+            "OM_INGESTION_BOT_JWT não definido. Rode na raiz do repo (host, fora do "
+            "container, com o perfil governance no ar): "
+            "python scripts/setup_om_bot_token.py "
+            "— depois: docker compose up -d airflow-webserver airflow-scheduler "
+            "(restart não relê o .env, precisa recriar o container)"
+        )
+    return jwt
+
+
 # ---------------------------------------------------------------------------
 # Task 1 — Ingestão de metadados
 # ---------------------------------------------------------------------------
 def run_metadata_ingestion():
     from metadata.workflow.metadata import MetadataWorkflow
 
-    jwt = os.environ.get("OM_INGESTION_BOT_JWT", "")
-    if not jwt:
-        raise ValueError("OM_INGESTION_BOT_JWT não definido")
+    jwt = _require_bot_jwt()
 
     config = f"""
 source:
@@ -65,9 +82,7 @@ workflowConfig:
 def run_profiler():
     from metadata.workflow.profiler import ProfilerWorkflow
 
-    jwt = os.environ.get("OM_INGESTION_BOT_JWT", "")
-    if not jwt:
-        raise ValueError("OM_INGESTION_BOT_JWT não definido")
+    jwt = _require_bot_jwt()
 
     config = f"""
 source:
@@ -147,9 +162,7 @@ def _listar_tabelas_com_testes() -> list[str]:
 def run_data_quality():
     from metadata.workflow.data_quality import TestSuiteWorkflow
 
-    jwt = os.environ.get("OM_INGESTION_BOT_JWT", "")
-    if not jwt:
-        raise ValueError("OM_INGESTION_BOT_JWT não definido")
+    jwt = _require_bot_jwt()
 
     tabelas_com_testes = _listar_tabelas_com_testes()
 

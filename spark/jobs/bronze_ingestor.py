@@ -112,11 +112,31 @@ def ingerir(spark: SparkSession, logical_date: str):
         )
     )
 
-    # Append-only — Bronze nunca deleta dados
+    # Coleta os caminhos de origem antes do write — precisamos deles para limpar o
+    # landing/ depois, e df_raw é lazy (reler depois do write custaria outro scan).
+    arquivos_lidos = [
+        r["fonte_arquivo"] for r in df_bronze.select("fonte_arquivo").distinct().collect()
+    ]
+
+    # Append-only — Bronze nunca deleta ou atualiza os dados já gravados
     df_bronze.writeTo("lakehouse.bronze.dados").append()
 
     count = df_bronze.count()
     print(f"Bronze: {count} registros ingeridos no lote {id_lote}")
+
+    # Remove do landing/ só os arquivos que acabamos de commitar na Bronze — do
+    # contrário a próxima execução (a cada 5 min) lê os mesmos arquivos de novo e
+    # duplica tudo (Bronze é append-only e o MERGE/INSERT do Silver não protege
+    # contra duplicatas dentro do próprio lote de origem, só contra o que já está
+    # no target).
+    hadoop_conf = spark._jsc.hadoopConfiguration()
+    removidos = 0
+    for caminho in arquivos_lidos:
+        path = spark._jvm.org.apache.hadoop.fs.Path(caminho)
+        fs = path.getFileSystem(hadoop_conf)
+        if fs.delete(path, False):
+            removidos += 1
+    print(f"Landing: {removidos}/{len(arquivos_lidos)} arquivos removidos após ingestão")
 
 
 def main():
