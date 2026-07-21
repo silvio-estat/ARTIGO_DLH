@@ -350,7 +350,12 @@ def main():
     parser.add_argument("--host", default="localhost:9000")
     parser.add_argument("--user", default="minio_admin")
     parser.add_argument("--password", default="minio_pass_2026")
+    parser.add_argument("--seed", type=int, default=None, help="Seed para reprodutibilidade (random + Faker)")
     args = parser.parse_args()
+
+    if args.seed is not None:
+        random.seed(args.seed)
+        fake.seed_instance(args.seed)
 
     client = Minio(args.host, access_key=args.user, secret_key=args.password, secure=False)
     tipos = list(GERADORES.keys()) if args.tipo == "todos" else [args.tipo]

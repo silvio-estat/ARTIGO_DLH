@@ -1,0 +1,1390 @@
+[2026-07-21T18:41:28Z] ===== INICIO DO PROTOCOLO EXPERIMENTAL SSCAD 2026 =====
+[2026-07-21T18:41:28Z] Specs de ambiente gravadas em resultados/ambiente.txt
+[2026-07-21T18:41:28Z] ===== E1 — Escalabilidade com volume (12 reps/ponto) =====
+[2026-07-21T18:41:28Z] --- reset: docker compose down -v
+ Container dlh_airflow_scheduler Stopping 
+ Container dlh_spark_worker Stopping 
+ Container dlh_airflow_webserver Stopping 
+ Container dlh_trino Stopping 
+ Container dlh_openmetadata_ingestion Stopping 
+ Container dlh_trino Stopped 
+ Container dlh_trino Removing 
+ Container dlh_trino Removed 
+ Container dlh_spark_worker Stopped 
+ Container dlh_spark_worker Removing 
+ Container dlh_spark_worker Removed 
+ Container dlh_spark_master Stopping 
+ Container dlh_spark_master Stopped 
+ Container dlh_spark_master Removing 
+ Container dlh_spark_master Removed 
+ Container dlh_hive_metastore Stopping 
+ Container dlh_airflow_scheduler Stopped 
+ Container dlh_airflow_scheduler Removing 
+ Container dlh_airflow_scheduler Removed 
+ Container dlh_airflow_webserver Stopped 
+ Container dlh_airflow_webserver Removing 
+ Container dlh_airflow_webserver Removed 
+ Container dlh_airflow_init Stopping 
+ Container dlh_airflow_init Stopped 
+ Container dlh_airflow_init Removing 
+ Container dlh_airflow_init Removed 
+ Container dlh_openmetadata_ingestion Stopped 
+ Container dlh_openmetadata_ingestion Removing 
+ Container dlh_openmetadata_ingestion Removed 
+ Container dlh_openmetadata Stopping 
+ Container dlh_hive_metastore Stopped 
+ Container dlh_hive_metastore Removing 
+ Container dlh_hive_metastore Removed 
+ Container dlh_minio_init Stopping 
+ Container dlh_minio_init Stopped 
+ Container dlh_minio_init Removing 
+ Container dlh_minio_init Removed 
+ Container dlh_minio Stopping 
+ Container dlh_minio Stopped 
+ Container dlh_minio Removing 
+ Container dlh_minio Removed 
+ Container dlh_openmetadata Stopped 
+ Container dlh_openmetadata Removing 
+ Container dlh_openmetadata Removed 
+ Container dlh_openmetadata_migrate Stopping 
+ Container dlh_openmetadata_migrate Stopped 
+ Container dlh_openmetadata_migrate Removing 
+ Container dlh_openmetadata_migrate Removed 
+ Container dlh_postgres Stopping 
+ Container dlh_elasticsearch Stopping 
+ Container dlh_postgres Stopped 
+ Container dlh_postgres Removing 
+ Container dlh_postgres Removed 
+ Container dlh_elasticsearch Stopped 
+ Container dlh_elasticsearch Removing 
+ Container dlh_elasticsearch Removed 
+ Volume artigo_dlh_airflow_logs Removing 
+ Volume artigo_dlh_elasticsearch_data Removing 
+ Volume artigo_dlh_postgres_data Removing 
+ Volume artigo_dlh_airflow_plugins Removing 
+ Volume artigo_dlh_minio_data Removing 
+ Network artigo_dlh_dlh_net Removing 
+ Volume artigo_dlh_airflow_logs Removed 
+ Volume artigo_dlh_elasticsearch_data Removed 
+ Volume artigo_dlh_airflow_plugins Removed 
+ Volume artigo_dlh_postgres_data Removed 
+ Volume artigo_dlh_minio_data Removed 
+ Network artigo_dlh_dlh_net Removed 
+[2026-07-21T18:41:51Z] --- reset: docker compose up -d (core, sem governance)
+ Network artigo_dlh_dlh_net Creating 
+ Network artigo_dlh_dlh_net Created 
+ Volume artigo_dlh_postgres_data Creating 
+ Volume artigo_dlh_postgres_data Created 
+ Volume artigo_dlh_minio_data Creating 
+ Volume artigo_dlh_minio_data Created 
+ Volume artigo_dlh_airflow_logs Creating 
+ Volume artigo_dlh_airflow_logs Created 
+ Volume artigo_dlh_airflow_plugins Creating 
+ Volume artigo_dlh_airflow_plugins Created 
+ Container dlh_minio Creating 
+ Container dlh_postgres Creating 
+ Container dlh_minio Created 
+ Container dlh_minio_init Creating 
+ Container dlh_postgres Created 
+ Container dlh_airflow_init Creating 
+ Container dlh_minio_init Created 
+ Container dlh_hive_metastore Creating 
+ Container dlh_airflow_init Created 
+ Container dlh_airflow_scheduler Creating 
+ Container dlh_airflow_webserver Creating 
+ Container dlh_hive_metastore Created 
+ Container dlh_trino Creating 
+ Container dlh_spark_master Creating 
+ Container dlh_airflow_scheduler Created 
+ Container dlh_airflow_webserver Created 
+ Container dlh_spark_master Created 
+ Container dlh_spark_worker Creating 
+ Container dlh_trino Created 
+ Container dlh_spark_worker Created 
+ Container dlh_minio Starting 
+ Container dlh_postgres Starting 
+ Container dlh_minio Started 
+ Container dlh_minio Waiting 
+ Container dlh_postgres Started 
+ Container dlh_postgres Waiting 
+ Container dlh_postgres Healthy 
+ Container dlh_airflow_init Starting 
+ Container dlh_airflow_init Started 
+ Container dlh_airflow_init Waiting 
+ Container dlh_airflow_init Waiting 
+ Container dlh_minio Healthy 
+ Container dlh_minio_init Starting 
+ Container dlh_minio_init Started 
+ Container dlh_postgres Waiting 
+ Container dlh_minio_init Waiting 
+ Container dlh_minio_init Exited 
+ Container dlh_postgres Healthy 
+ Container dlh_hive_metastore Starting 
+ Container dlh_hive_metastore Started 
+ Container dlh_hive_metastore Waiting 
+ Container dlh_hive_metastore Waiting 
+ Container dlh_airflow_init Exited 
+ Container dlh_airflow_scheduler Starting 
+ Container dlh_airflow_init Exited 
+ Container dlh_airflow_webserver Starting 
+ Container dlh_airflow_scheduler Started 
+ Container dlh_airflow_webserver Started 
+ Container dlh_hive_metastore Healthy 
+ Container dlh_trino Starting 
+ Container dlh_hive_metastore Healthy 
+ Container dlh_spark_master Starting 
+ Container dlh_trino Started 
+ Container dlh_spark_master Started 
+ Container dlh_spark_worker Starting 
+ Container dlh_spark_worker Started 
+[2026-07-21T18:42:44Z] --- stack pronta
+[2026-07-21T18:42:44Z] >>> Rodando V1_rep1 (lotes=2 registros=500 seed=1)
+== V1_rep1: gerando 2x500 (seed=1) ==
+
+Gerando 2 lote(s) x 500 registros para: ['gps', 'sensor', 'relt_intel', 'paf', 'obstaculo', 'seg_area', 'pessoal', 'material']
+
+  -> landing/gps/lote_20260721_184244_001.json (500 registros, 175759 bytes)
+  -> landing/gps/lote_20260721_184244_002.json (500 registros, 175627 bytes)
+  -> landing/sensor/lote_20260721_184244_001.json (500 registros, 197682 bytes)
+  -> landing/sensor/lote_20260721_184244_002.json (500 registros, 197741 bytes)
+  -> landing/relt_intel/lote_20260721_184244_001.json (500 registros, 253080 bytes)
+  -> landing/relt_intel/lote_20260721_184244_002.json (500 registros, 252541 bytes)
+  -> landing/paf/lote_20260721_184244_001.json (500 registros, 227426 bytes)
+  -> landing/paf/lote_20260721_184244_002.json (500 registros, 227531 bytes)
+  -> landing/obstaculo/lote_20260721_184244_001.json (500 registros, 225069 bytes)
+  -> landing/obstaculo/lote_20260721_184244_002.json (500 registros, 225292 bytes)
+  -> landing/seg_area/lote_20260721_184244_001.json (500 registros, 241947 bytes)
+  -> landing/seg_area/lote_20260721_184244_002.json (500 registros, 241702 bytes)
+  -> landing/pessoal/lote_20260721_184244_001.json (500 registros, 241275 bytes)
+  -> landing/pessoal/lote_20260721_184244_002.json (500 registros, 241521 bytes)
+  -> landing/material/lote_20260721_184244_001.json (500 registros, 179544 bytes)
+  -> landing/material/lote_20260721_184244_002.json (500 registros, 179472 bytes)
+
+Total enviado: 8000 registros -> MinIO landing/
+Agora dispare a DAG 'dag_ingestao_bronze' no Airflow.
+
+/home/airflow/.local/lib/python3.10/site-packages/openlineage/client/transport/kafka.py:12 UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  dag_ingestao_bronze OK (26.228s)
+/home/airflow/.local/lib/python3.10/site-packages/openlineage/client/transport/kafka.py:12 UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  dag_silver_transform OK (192.022s)
+/home/airflow/.local/lib/python3.10/site-packages/openlineage/client/transport/kafka.py:12 UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  dag_gold_refresh OK (116.885s)
+== V1_rep1 concluido ==
+Metricas Trino coletadas para tag=V1_rep1
+[2026-07-21T18:48:48Z] <<< V1_rep1: OK
+[2026-07-21T18:48:48Z] --- reset: docker compose down -v
+ Container dlh_spark_worker Stopping 
+ Container dlh_airflow_webserver Stopping 
+ Container dlh_trino Stopping 
+ Container dlh_airflow_scheduler Stopping 
+ Container dlh_trino Stopped 
+ Container dlh_trino Removing 
+ Container dlh_trino Removed 
+ Container dlh_spark_worker Stopped 
+ Container dlh_spark_worker Removing 
+ Container dlh_spark_worker Removed 
+ Container dlh_spark_master Stopping 
+ Container dlh_spark_master Stopped 
+ Container dlh_spark_master Removing 
+ Container dlh_spark_master Removed 
+ Container dlh_hive_metastore Stopping 
+ Container dlh_airflow_scheduler Stopped 
+ Container dlh_airflow_scheduler Removing 
+ Container dlh_airflow_scheduler Removed 
+ Container dlh_airflow_webserver Stopped 
+ Container dlh_airflow_webserver Removing 
+ Container dlh_airflow_webserver Removed 
+ Container dlh_airflow_init Stopping 
+ Container dlh_airflow_init Stopped 
+ Container dlh_airflow_init Removing 
+ Container dlh_airflow_init Removed 
+ Container dlh_hive_metastore Stopped 
+ Container dlh_hive_metastore Removing 
+ Container dlh_hive_metastore Removed 
+ Container dlh_minio_init Stopping 
+ Container dlh_postgres Stopping 
+ Container dlh_minio_init Stopped 
+ Container dlh_minio_init Removing 
+ Container dlh_minio_init Removed 
+ Container dlh_minio Stopping 
+ Container dlh_minio Stopped 
+ Container dlh_minio Removing 
+ Container dlh_minio Removed 
+ Container dlh_postgres Stopped 
+ Container dlh_postgres Removing 
+ Container dlh_postgres Removed 
+ Volume artigo_dlh_postgres_data Removing 
+ Network artigo_dlh_dlh_net Removing 
+ Volume artigo_dlh_airflow_plugins Removing 
+ Volume artigo_dlh_airflow_logs Removing 
+ Volume artigo_dlh_minio_data Removing 
+ Volume artigo_dlh_postgres_data Removed 
+ Volume artigo_dlh_airflow_plugins Removed 
+ Volume artigo_dlh_airflow_logs Removed 
+ Volume artigo_dlh_minio_data Removed 
+ Network artigo_dlh_dlh_net Removed 
+[2026-07-21T18:49:00Z] --- reset: docker compose up -d (core, sem governance)
+ Network artigo_dlh_dlh_net Creating 
+ Network artigo_dlh_dlh_net Created 
+ Volume artigo_dlh_airflow_plugins Creating 
+ Volume artigo_dlh_airflow_plugins Created 
+ Volume artigo_dlh_postgres_data Creating 
+ Volume artigo_dlh_postgres_data Created 
+ Volume artigo_dlh_minio_data Creating 
+ Volume artigo_dlh_minio_data Created 
+ Volume artigo_dlh_airflow_logs Creating 
+ Volume artigo_dlh_airflow_logs Created 
+ Container dlh_minio Creating 
+ Container dlh_postgres Creating 
+ Container dlh_postgres Created 
+ Container dlh_airflow_init Creating 
+ Container dlh_minio Created 
+ Container dlh_minio_init Creating 
+ Container dlh_airflow_init Created 
+ Container dlh_airflow_scheduler Creating 
+ Container dlh_airflow_webserver Creating 
+ Container dlh_minio_init Created 
+ Container dlh_hive_metastore Creating 
+ Container dlh_airflow_scheduler Created 
+ Container dlh_hive_metastore Created 
+ Container dlh_spark_master Creating 
+ Container dlh_trino Creating 
+ Container dlh_airflow_webserver Created 
+ Container dlh_spark_master Created 
+ Container dlh_spark_worker Creating 
+ Container dlh_trino Created 
+ Container dlh_spark_worker Created 
+ Container dlh_minio Starting 
+ Container dlh_postgres Starting 
+ Container dlh_minio Started 
+ Container dlh_minio Waiting 
+ Container dlh_postgres Started 
+ Container dlh_postgres Waiting 
+ Container dlh_postgres Healthy 
+ Container dlh_airflow_init Starting 
+ Container dlh_airflow_init Started 
+ Container dlh_airflow_init Waiting 
+ Container dlh_airflow_init Waiting 
+ Container dlh_minio Healthy 
+ Container dlh_minio_init Starting 
+ Container dlh_minio_init Started 
+ Container dlh_minio_init Waiting 
+ Container dlh_postgres Waiting 
+ Container dlh_postgres Healthy 
+ Container dlh_minio_init Exited 
+ Container dlh_hive_metastore Starting 
+ Container dlh_hive_metastore Started 
+ Container dlh_hive_metastore Waiting 
+ Container dlh_hive_metastore Waiting 
+ Container dlh_airflow_init Exited 
+ Container dlh_airflow_scheduler Starting 
+ Container dlh_airflow_init Exited 
+ Container dlh_airflow_webserver Starting 
+ Container dlh_airflow_scheduler Started 
+ Container dlh_airflow_webserver Started 
+ Container dlh_hive_metastore Healthy 
+ Container dlh_trino Starting 
+ Container dlh_hive_metastore Healthy 
+ Container dlh_spark_master Starting 
+ Container dlh_trino Started 
+ Container dlh_spark_master Started 
+ Container dlh_spark_worker Starting 
+ Container dlh_spark_worker Started 
+[2026-07-21T18:49:53Z] --- stack pronta
+[2026-07-21T18:49:54Z] >>> Rodando V1_rep2 (lotes=2 registros=500 seed=2)
+== V1_rep2: gerando 2x500 (seed=2) ==
+
+Gerando 2 lote(s) x 500 registros para: ['gps', 'sensor', 'relt_intel', 'paf', 'obstaculo', 'seg_area', 'pessoal', 'material']
+
+  -> landing/gps/lote_20260721_184954_001.json (500 registros, 175732 bytes)
+  -> landing/gps/lote_20260721_184954_002.json (500 registros, 175648 bytes)
+  -> landing/sensor/lote_20260721_184954_001.json (500 registros, 197656 bytes)
+  -> landing/sensor/lote_20260721_184954_002.json (500 registros, 197651 bytes)
+  -> landing/relt_intel/lote_20260721_184954_001.json (500 registros, 253335 bytes)
+  -> landing/relt_intel/lote_20260721_184954_002.json (500 registros, 253858 bytes)
+  -> landing/paf/lote_20260721_184954_001.json (500 registros, 227176 bytes)
+  -> landing/paf/lote_20260721_184954_002.json (500 registros, 227532 bytes)
+  -> landing/obstaculo/lote_20260721_184954_001.json (500 registros, 225315 bytes)
+  -> landing/obstaculo/lote_20260721_184954_002.json (500 registros, 225142 bytes)
+  -> landing/seg_area/lote_20260721_184954_001.json (500 registros, 242169 bytes)
+  -> landing/seg_area/lote_20260721_184954_002.json (500 registros, 242339 bytes)
+  -> landing/pessoal/lote_20260721_184954_001.json (500 registros, 241606 bytes)
+  -> landing/pessoal/lote_20260721_184954_002.json (500 registros, 241481 bytes)
+  -> landing/material/lote_20260721_184954_001.json (500 registros, 179424 bytes)
+  -> landing/material/lote_20260721_184954_002.json (500 registros, 179593 bytes)
+
+Total enviado: 8000 registros -> MinIO landing/
+Agora dispare a DAG 'dag_ingestao_bronze' no Airflow.
+
+/home/airflow/.local/lib/python3.10/site-packages/openlineage/client/transport/kafka.py:12 UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  dag_ingestao_bronze OK (26.112s)
+/home/airflow/.local/lib/python3.10/site-packages/openlineage/client/transport/kafka.py:12 UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  dag_silver_transform OK (191.815s)
+/home/airflow/.local/lib/python3.10/site-packages/openlineage/client/transport/kafka.py:12 UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  dag_gold_refresh OK (124.005s)
+== V1_rep2 concluido ==
+Metricas Trino coletadas para tag=V1_rep2
+[2026-07-21T18:56:04Z] <<< V1_rep2: OK
+[2026-07-21T18:56:04Z] --- reset: docker compose down -v
+ Container dlh_trino Stopping 
+ Container dlh_spark_worker Stopping 
+ Container dlh_airflow_webserver Stopping 
+ Container dlh_airflow_scheduler Stopping 
+ Container dlh_trino Stopped 
+ Container dlh_trino Removing 
+ Container dlh_trino Removed 
+ Container dlh_spark_worker Stopped 
+ Container dlh_spark_worker Removing 
+ Container dlh_spark_worker Removed 
+ Container dlh_spark_master Stopping 
+ Container dlh_spark_master Stopped 
+ Container dlh_spark_master Removing 
+ Container dlh_spark_master Removed 
+ Container dlh_hive_metastore Stopping 
+ Container dlh_airflow_scheduler Stopped 
+ Container dlh_airflow_scheduler Removing 
+ Container dlh_airflow_scheduler Removed 
+ Container dlh_airflow_webserver Stopped 
+ Container dlh_airflow_webserver Removing 
+ Container dlh_airflow_webserver Removed 
+ Container dlh_airflow_init Stopping 
+ Container dlh_airflow_init Stopped 
+ Container dlh_airflow_init Removing 
+ Container dlh_airflow_init Removed 
+ Container dlh_hive_metastore Stopped 
+ Container dlh_hive_metastore Removing 
+ Container dlh_hive_metastore Removed 
+ Container dlh_postgres Stopping 
+ Container dlh_minio_init Stopping 
+ Container dlh_minio_init Stopped 
+ Container dlh_minio_init Removing 
+ Container dlh_minio_init Removed 
+ Container dlh_minio Stopping 
+ Container dlh_minio Stopped 
+ Container dlh_minio Removing 
+ Container dlh_minio Removed 
+ Container dlh_postgres Stopped 
+ Container dlh_postgres Removing 
+ Container dlh_postgres Removed 
+ Volume artigo_dlh_postgres_data Removing 
+ Volume artigo_dlh_airflow_plugins Removing 
+ Volume artigo_dlh_minio_data Removing 
+ Volume artigo_dlh_airflow_logs Removing 
+ Network artigo_dlh_dlh_net Removing 
+ Volume artigo_dlh_postgres_data Removed 
+ Volume artigo_dlh_airflow_plugins Removed 
+ Volume artigo_dlh_minio_data Removed 
+ Volume artigo_dlh_airflow_logs Removed 
+ Network artigo_dlh_dlh_net Removed 
+[2026-07-21T18:56:17Z] --- reset: docker compose up -d (core, sem governance)
+ Network artigo_dlh_dlh_net Creating 
+ Network artigo_dlh_dlh_net Created 
+ Volume artigo_dlh_airflow_logs Creating 
+ Volume artigo_dlh_airflow_logs Created 
+ Volume artigo_dlh_airflow_plugins Creating 
+ Volume artigo_dlh_airflow_plugins Created 
+ Volume artigo_dlh_minio_data Creating 
+ Volume artigo_dlh_minio_data Created 
+ Volume artigo_dlh_postgres_data Creating 
+ Volume artigo_dlh_postgres_data Created 
+ Container dlh_minio Creating 
+ Container dlh_postgres Creating 
+ Container dlh_minio Created 
+ Container dlh_minio_init Creating 
+ Container dlh_postgres Created 
+ Container dlh_airflow_init Creating 
+ Container dlh_minio_init Created 
+ Container dlh_hive_metastore Creating 
+ Container dlh_airflow_init Created 
+ Container dlh_airflow_scheduler Creating 
+ Container dlh_airflow_webserver Creating 
+ Container dlh_hive_metastore Created 
+ Container dlh_trino Creating 
+ Container dlh_spark_master Creating 
+ Container dlh_airflow_scheduler Created 
+ Container dlh_airflow_webserver Created 
+ Container dlh_spark_master Created 
+ Container dlh_spark_worker Creating 
+ Container dlh_trino Created 
+ Container dlh_spark_worker Created 
+ Container dlh_minio Starting 
+ Container dlh_postgres Starting 
+ Container dlh_minio Started 
+ Container dlh_minio Waiting 
+ Container dlh_postgres Started 
+ Container dlh_postgres Waiting 
+ Container dlh_postgres Healthy 
+ Container dlh_airflow_init Starting 
+ Container dlh_airflow_init Started 
+ Container dlh_airflow_init Waiting 
+ Container dlh_airflow_init Waiting 
+ Container dlh_minio Healthy 
+ Container dlh_minio_init Starting 
+ Container dlh_minio_init Started 
+ Container dlh_postgres Waiting 
+ Container dlh_minio_init Waiting 
+ Container dlh_minio_init Exited 
+ Container dlh_postgres Healthy 
+ Container dlh_hive_metastore Starting 
+ Container dlh_hive_metastore Started 
+ Container dlh_hive_metastore Waiting 
+ Container dlh_hive_metastore Waiting 
+ Container dlh_airflow_init Exited 
+ Container dlh_airflow_webserver Starting 
+ Container dlh_airflow_init Exited 
+ Container dlh_airflow_scheduler Starting 
+ Container dlh_airflow_webserver Started 
+ Container dlh_airflow_scheduler Started 
+ Container dlh_hive_metastore Healthy 
+ Container dlh_spark_master Starting 
+ Container dlh_hive_metastore Healthy 
+ Container dlh_trino Starting 
+ Container dlh_trino Started 
+ Container dlh_spark_master Started 
+ Container dlh_spark_worker Starting 
+ Container dlh_spark_worker Started 
+[2026-07-21T18:57:09Z] --- stack pronta
+[2026-07-21T18:57:09Z] >>> Rodando V1_rep3 (lotes=2 registros=500 seed=3)
+== V1_rep3: gerando 2x500 (seed=3) ==
+
+Gerando 2 lote(s) x 500 registros para: ['gps', 'sensor', 'relt_intel', 'paf', 'obstaculo', 'seg_area', 'pessoal', 'material']
+
+  -> landing/gps/lote_20260721_185710_001.json (500 registros, 175740 bytes)
+  -> landing/gps/lote_20260721_185710_002.json (500 registros, 175734 bytes)
+  -> landing/sensor/lote_20260721_185710_001.json (500 registros, 197721 bytes)
+  -> landing/sensor/lote_20260721_185710_002.json (500 registros, 197719 bytes)
+  -> landing/relt_intel/lote_20260721_185710_001.json (500 registros, 253033 bytes)
+  -> landing/relt_intel/lote_20260721_185710_002.json (500 registros, 253167 bytes)
+  -> landing/paf/lote_20260721_185710_001.json (500 registros, 227330 bytes)
+  -> landing/paf/lote_20260721_185710_002.json (500 registros, 227424 bytes)
+  -> landing/obstaculo/lote_20260721_185710_001.json (500 registros, 225176 bytes)
+  -> landing/obstaculo/lote_20260721_185710_002.json (500 registros, 225328 bytes)
+  -> landing/seg_area/lote_20260721_185710_001.json (500 registros, 241866 bytes)
+  -> landing/seg_area/lote_20260721_185710_002.json (500 registros, 242016 bytes)
+  -> landing/pessoal/lote_20260721_185710_001.json (500 registros, 241508 bytes)
+  -> landing/pessoal/lote_20260721_185710_002.json (500 registros, 241448 bytes)
+  -> landing/material/lote_20260721_185710_001.json (500 registros, 179454 bytes)
+  -> landing/material/lote_20260721_185710_002.json (500 registros, 179552 bytes)
+
+Total enviado: 8000 registros -> MinIO landing/
+Agora dispare a DAG 'dag_ingestao_bronze' no Airflow.
+
+/home/airflow/.local/lib/python3.10/site-packages/openlineage/client/transport/kafka.py:12 UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  dag_ingestao_bronze OK (26.199s)
+/home/airflow/.local/lib/python3.10/site-packages/openlineage/client/transport/kafka.py:12 UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  dag_silver_transform OK (198.962s)
+/home/airflow/.local/lib/python3.10/site-packages/openlineage/client/transport/kafka.py:12 UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  dag_gold_refresh OK (124.704s)
+== V1_rep3 concluido ==
+Metricas Trino coletadas para tag=V1_rep3
+[2026-07-21T19:03:28Z] <<< V1_rep3: OK
+[2026-07-21T19:03:28Z] --- reset: docker compose down -v
+ Container dlh_airflow_webserver Stopping 
+ Container dlh_airflow_scheduler Stopping 
+ Container dlh_spark_worker Stopping 
+ Container dlh_trino Stopping 
+ Container dlh_trino Stopped 
+ Container dlh_trino Removing 
+ Container dlh_trino Removed 
+ Container dlh_spark_worker Stopped 
+ Container dlh_spark_worker Removing 
+ Container dlh_spark_worker Removed 
+ Container dlh_spark_master Stopping 
+ Container dlh_spark_master Stopped 
+ Container dlh_spark_master Removing 
+ Container dlh_spark_master Removed 
+ Container dlh_hive_metastore Stopping 
+ Container dlh_airflow_scheduler Stopped 
+ Container dlh_airflow_scheduler Removing 
+ Container dlh_airflow_scheduler Removed 
+ Container dlh_airflow_webserver Stopped 
+ Container dlh_airflow_webserver Removing 
+ Container dlh_airflow_webserver Removed 
+ Container dlh_airflow_init Stopping 
+ Container dlh_airflow_init Stopped 
+ Container dlh_airflow_init Removing 
+ Container dlh_airflow_init Removed 
+ Container dlh_hive_metastore Stopped 
+ Container dlh_hive_metastore Removing 
+ Container dlh_hive_metastore Removed 
+ Container dlh_postgres Stopping 
+ Container dlh_minio_init Stopping 
+ Container dlh_minio_init Stopped 
+ Container dlh_minio_init Removing 
+ Container dlh_minio_init Removed 
+ Container dlh_minio Stopping 
+ Container dlh_minio Stopped 
+ Container dlh_minio Removing 
+ Container dlh_minio Removed 
+ Container dlh_postgres Stopped 
+ Container dlh_postgres Removing 
+ Container dlh_postgres Removed 
+ Volume artigo_dlh_airflow_plugins Removing 
+ Volume artigo_dlh_airflow_logs Removing 
+ Volume artigo_dlh_minio_data Removing 
+ Volume artigo_dlh_postgres_data Removing 
+ Network artigo_dlh_dlh_net Removing 
+ Volume artigo_dlh_airflow_plugins Removed 
+ Volume artigo_dlh_minio_data Removed 
+ Volume artigo_dlh_airflow_logs Removed 
+ Volume artigo_dlh_postgres_data Removed 
+ Network artigo_dlh_dlh_net Removed 
+[2026-07-21T19:03:40Z] --- reset: docker compose up -d (core, sem governance)
+ Network artigo_dlh_dlh_net Creating 
+ Network artigo_dlh_dlh_net Created 
+ Volume artigo_dlh_postgres_data Creating 
+ Volume artigo_dlh_postgres_data Created 
+ Volume artigo_dlh_airflow_logs Creating 
+ Volume artigo_dlh_airflow_logs Created 
+ Volume artigo_dlh_airflow_plugins Creating 
+ Volume artigo_dlh_airflow_plugins Created 
+ Volume artigo_dlh_minio_data Creating 
+ Volume artigo_dlh_minio_data Created 
+ Container dlh_minio Creating 
+ Container dlh_postgres Creating 
+ Container dlh_minio Created 
+ Container dlh_minio_init Creating 
+ Container dlh_postgres Created 
+ Container dlh_airflow_init Creating 
+ Container dlh_minio_init Created 
+ Container dlh_hive_metastore Creating 
+ Container dlh_airflow_init Created 
+ Container dlh_airflow_webserver Creating 
+ Container dlh_airflow_scheduler Creating 
+ Container dlh_hive_metastore Created 
+ Container dlh_trino Creating 
+ Container dlh_spark_master Creating 
+ Container dlh_airflow_scheduler Created 
+ Container dlh_airflow_webserver Created 
+ Container dlh_spark_master Created 
+ Container dlh_spark_worker Creating 
+ Container dlh_trino Created 
+ Container dlh_spark_worker Created 
+ Container dlh_minio Starting 
+ Container dlh_postgres Starting 
+ Container dlh_minio Started 
+ Container dlh_minio Waiting 
+ Container dlh_postgres Started 
+ Container dlh_postgres Waiting 
+ Container dlh_postgres Healthy 
+ Container dlh_airflow_init Starting 
+ Container dlh_airflow_init Started 
+ Container dlh_airflow_init Waiting 
+ Container dlh_airflow_init Waiting 
+ Container dlh_minio Healthy 
+ Container dlh_minio_init Starting 
+ Container dlh_minio_init Started 
+ Container dlh_postgres Waiting 
+ Container dlh_minio_init Waiting 
+ Container dlh_minio_init Exited 
+ Container dlh_postgres Healthy 
+ Container dlh_hive_metastore Starting 
+ Container dlh_hive_metastore Started 
+ Container dlh_hive_metastore Waiting 
+ Container dlh_hive_metastore Waiting 
+ Container dlh_airflow_init Exited 
+ Container dlh_airflow_scheduler Starting 
+ Container dlh_airflow_init Exited 
+ Container dlh_airflow_webserver Starting 
+ Container dlh_airflow_scheduler Started 
+ Container dlh_airflow_webserver Started 
+ Container dlh_hive_metastore Healthy 
+ Container dlh_trino Starting 
+ Container dlh_hive_metastore Healthy 
+ Container dlh_spark_master Starting 
+ Container dlh_trino Started 
+ Container dlh_spark_master Started 
+ Container dlh_spark_worker Starting 
+ Container dlh_spark_worker Started 
+[2026-07-21T19:04:28Z] --- stack pronta
+[2026-07-21T19:04:28Z] >>> Rodando V1_rep4 (lotes=2 registros=500 seed=4)
+== V1_rep4: gerando 2x500 (seed=4) ==
+
+Gerando 2 lote(s) x 500 registros para: ['gps', 'sensor', 'relt_intel', 'paf', 'obstaculo', 'seg_area', 'pessoal', 'material']
+
+  -> landing/gps/lote_20260721_190428_001.json (500 registros, 175702 bytes)
+  -> landing/gps/lote_20260721_190428_002.json (500 registros, 175627 bytes)
+  -> landing/sensor/lote_20260721_190428_001.json (500 registros, 197722 bytes)
+  -> landing/sensor/lote_20260721_190428_002.json (500 registros, 197657 bytes)
+  -> landing/relt_intel/lote_20260721_190428_001.json (500 registros, 252118 bytes)
+  -> landing/relt_intel/lote_20260721_190428_002.json (500 registros, 253668 bytes)
+  -> landing/paf/lote_20260721_190428_001.json (500 registros, 227485 bytes)
+  -> landing/paf/lote_20260721_190428_002.json (500 registros, 227231 bytes)
+  -> landing/obstaculo/lote_20260721_190428_001.json (500 registros, 225220 bytes)
+  -> landing/obstaculo/lote_20260721_190428_002.json (500 registros, 225321 bytes)
+  -> landing/seg_area/lote_20260721_190428_001.json (500 registros, 241983 bytes)
+  -> landing/seg_area/lote_20260721_190428_002.json (500 registros, 241962 bytes)
+  -> landing/pessoal/lote_20260721_190428_001.json (500 registros, 241740 bytes)
+  -> landing/pessoal/lote_20260721_190428_002.json (500 registros, 241599 bytes)
+  -> landing/material/lote_20260721_190428_001.json (500 registros, 179451 bytes)
+  -> landing/material/lote_20260721_190428_002.json (500 registros, 179558 bytes)
+
+Total enviado: 8000 registros -> MinIO landing/
+Agora dispare a DAG 'dag_ingestao_bronze' no Airflow.
+
+/home/airflow/.local/lib/python3.10/site-packages/openlineage/client/transport/kafka.py:12 UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  dag_ingestao_bronze OK (26.215s)
+/home/airflow/.local/lib/python3.10/site-packages/openlineage/client/transport/kafka.py:12 UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  dag_silver_transform OK (191.284s)
+/home/airflow/.local/lib/python3.10/site-packages/openlineage/client/transport/kafka.py:12 UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  dag_gold_refresh OK (116.025s)
+== V1_rep4 concluido ==
+Metricas Trino coletadas para tag=V1_rep4
+[2026-07-21T19:10:30Z] <<< V1_rep4: OK
+[2026-07-21T19:10:30Z] --- reset: docker compose down -v
+ Container dlh_airflow_scheduler Stopping 
+ Container dlh_spark_worker Stopping 
+ Container dlh_trino Stopping 
+ Container dlh_airflow_webserver Stopping 
+ Container dlh_trino Stopped 
+ Container dlh_trino Removing 
+ Container dlh_trino Removed 
+ Container dlh_spark_worker Stopped 
+ Container dlh_spark_worker Removing 
+ Container dlh_spark_worker Removed 
+ Container dlh_spark_master Stopping 
+ Container dlh_spark_master Stopped 
+ Container dlh_spark_master Removing 
+ Container dlh_spark_master Removed 
+ Container dlh_hive_metastore Stopping 
+ Container dlh_airflow_scheduler Stopped 
+ Container dlh_airflow_scheduler Removing 
+ Container dlh_airflow_scheduler Removed 
+ Container dlh_airflow_webserver Stopped 
+ Container dlh_airflow_webserver Removing 
+ Container dlh_airflow_webserver Removed 
+ Container dlh_airflow_init Stopping 
+ Container dlh_airflow_init Stopped 
+ Container dlh_airflow_init Removing 
+ Container dlh_airflow_init Removed 
+ Container dlh_hive_metastore Stopped 
+ Container dlh_hive_metastore Removing 
+ Container dlh_hive_metastore Removed 
+ Container dlh_postgres Stopping 
+ Container dlh_minio_init Stopping 
+ Container dlh_minio_init Stopped 
+ Container dlh_minio_init Removing 
+ Container dlh_minio_init Removed 
+ Container dlh_minio Stopping 
+ Container dlh_minio Stopped 
+ Container dlh_minio Removing 
+ Container dlh_minio Removed 
+ Container dlh_postgres Stopped 
+ Container dlh_postgres Removing 
+ Container dlh_postgres Removed 
+ Volume artigo_dlh_airflow_plugins Removing 
+ Volume artigo_dlh_airflow_logs Removing 
+ Volume artigo_dlh_minio_data Removing 
+ Volume artigo_dlh_postgres_data Removing 
+ Network artigo_dlh_dlh_net Removing 
+ Volume artigo_dlh_airflow_logs Removed 
+ Volume artigo_dlh_airflow_plugins Removed 
+ Volume artigo_dlh_minio_data Removed 
+ Volume artigo_dlh_postgres_data Removed 
+ Network artigo_dlh_dlh_net Removed 
+[2026-07-21T19:10:42Z] --- reset: docker compose up -d (core, sem governance)
+ Network artigo_dlh_dlh_net Creating 
+ Network artigo_dlh_dlh_net Created 
+ Volume artigo_dlh_airflow_logs Creating 
+ Volume artigo_dlh_airflow_logs Created 
+ Volume artigo_dlh_airflow_plugins Creating 
+ Volume artigo_dlh_airflow_plugins Created 
+ Volume artigo_dlh_postgres_data Creating 
+ Volume artigo_dlh_postgres_data Created 
+ Volume artigo_dlh_minio_data Creating 
+ Volume artigo_dlh_minio_data Created 
+ Container dlh_minio Creating 
+ Container dlh_postgres Creating 
+ Container dlh_postgres Created 
+ Container dlh_airflow_init Creating 
+ Container dlh_minio Created 
+ Container dlh_minio_init Creating 
+ Container dlh_minio_init Created 
+ Container dlh_hive_metastore Creating 
+ Container dlh_airflow_init Created 
+ Container dlh_airflow_scheduler Creating 
+ Container dlh_airflow_webserver Creating 
+ Container dlh_hive_metastore Created 
+ Container dlh_trino Creating 
+ Container dlh_spark_master Creating 
+ Container dlh_airflow_scheduler Created 
+ Container dlh_airflow_webserver Created 
+ Container dlh_trino Created 
+ Container dlh_spark_master Created 
+ Container dlh_spark_worker Creating 
+ Container dlh_spark_worker Created 
+ Container dlh_postgres Starting 
+ Container dlh_minio Starting 
+ Container dlh_minio Started 
+ Container dlh_minio Waiting 
+ Container dlh_postgres Started 
+ Container dlh_postgres Waiting 
+ Container dlh_postgres Healthy 
+ Container dlh_airflow_init Starting 
+ Container dlh_airflow_init Started 
+ Container dlh_airflow_init Waiting 
+ Container dlh_airflow_init Waiting 
+ Container dlh_minio Healthy 
+ Container dlh_minio_init Starting 
+ Container dlh_minio_init Started 
+ Container dlh_minio_init Waiting 
+ Container dlh_postgres Waiting 
+ Container dlh_minio_init Exited 
+ Container dlh_postgres Healthy 
+ Container dlh_hive_metastore Starting 
+ Container dlh_hive_metastore Started 
+ Container dlh_hive_metastore Waiting 
+ Container dlh_hive_metastore Waiting 
+ Container dlh_airflow_init Exited 
+ Container dlh_airflow_scheduler Starting 
+ Container dlh_airflow_init Exited 
+ Container dlh_airflow_webserver Starting 
+ Container dlh_airflow_webserver Started 
+ Container dlh_airflow_scheduler Started 
+ Container dlh_hive_metastore Healthy 
+ Container dlh_spark_master Starting 
+ Container dlh_hive_metastore Healthy 
+ Container dlh_trino Starting 
+ Container dlh_trino Started 
+ Container dlh_spark_master Started 
+ Container dlh_spark_worker Starting 
+ Container dlh_spark_worker Started 
+[2026-07-21T19:11:35Z] --- stack pronta
+[2026-07-21T19:11:35Z] >>> Rodando V1_rep5 (lotes=2 registros=500 seed=5)
+== V1_rep5: gerando 2x500 (seed=5) ==
+
+Gerando 2 lote(s) x 500 registros para: ['gps', 'sensor', 'relt_intel', 'paf', 'obstaculo', 'seg_area', 'pessoal', 'material']
+
+  -> landing/gps/lote_20260721_191135_001.json (500 registros, 175620 bytes)
+  -> landing/gps/lote_20260721_191135_002.json (500 registros, 175724 bytes)
+  -> landing/sensor/lote_20260721_191135_001.json (500 registros, 197735 bytes)
+  -> landing/sensor/lote_20260721_191135_002.json (500 registros, 197620 bytes)
+  -> landing/relt_intel/lote_20260721_191135_001.json (500 registros, 253635 bytes)
+  -> landing/relt_intel/lote_20260721_191135_002.json (500 registros, 253164 bytes)
+  -> landing/paf/lote_20260721_191135_001.json (500 registros, 227576 bytes)
+  -> landing/paf/lote_20260721_191135_002.json (500 registros, 227462 bytes)
+  -> landing/obstaculo/lote_20260721_191135_001.json (500 registros, 225347 bytes)
+  -> landing/obstaculo/lote_20260721_191135_002.json (500 registros, 225299 bytes)
+  -> landing/seg_area/lote_20260721_191135_001.json (500 registros, 241980 bytes)
+  -> landing/seg_area/lote_20260721_191135_002.json (500 registros, 241874 bytes)
+  -> landing/pessoal/lote_20260721_191135_001.json (500 registros, 241414 bytes)
+  -> landing/pessoal/lote_20260721_191135_002.json (500 registros, 241762 bytes)
+  -> landing/material/lote_20260721_191135_001.json (500 registros, 179275 bytes)
+  -> landing/material/lote_20260721_191135_002.json (500 registros, 179376 bytes)
+
+Total enviado: 8000 registros -> MinIO landing/
+Agora dispare a DAG 'dag_ingestao_bronze' no Airflow.
+
+/home/airflow/.local/lib/python3.10/site-packages/openlineage/client/transport/kafka.py:12 UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  dag_ingestao_bronze OK (26.206s)
+/home/airflow/.local/lib/python3.10/site-packages/openlineage/client/transport/kafka.py:12 UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  dag_silver_transform OK (192.110s)
+/home/airflow/.local/lib/python3.10/site-packages/openlineage/client/transport/kafka.py:12 UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  dag_gold_refresh OK (117.296s)
+== V1_rep5 concluido ==
+Metricas Trino coletadas para tag=V1_rep5
+[2026-07-21T19:17:39Z] <<< V1_rep5: OK
+[2026-07-21T19:17:39Z] --- reset: docker compose down -v
+ Container dlh_trino Stopping 
+ Container dlh_spark_worker Stopping 
+ Container dlh_airflow_webserver Stopping 
+ Container dlh_airflow_scheduler Stopping 
+ Container dlh_trino Stopped 
+ Container dlh_trino Removing 
+ Container dlh_trino Removed 
+ Container dlh_spark_worker Stopped 
+ Container dlh_spark_worker Removing 
+ Container dlh_spark_worker Removed 
+ Container dlh_spark_master Stopping 
+ Container dlh_spark_master Stopped 
+ Container dlh_spark_master Removing 
+ Container dlh_spark_master Removed 
+ Container dlh_hive_metastore Stopping 
+ Container dlh_airflow_scheduler Stopped 
+ Container dlh_airflow_scheduler Removing 
+ Container dlh_airflow_scheduler Removed 
+ Container dlh_airflow_webserver Stopped 
+ Container dlh_airflow_webserver Removing 
+ Container dlh_airflow_webserver Removed 
+ Container dlh_airflow_init Stopping 
+ Container dlh_airflow_init Stopped 
+ Container dlh_airflow_init Removing 
+ Container dlh_airflow_init Removed 
+ Container dlh_hive_metastore Stopped 
+ Container dlh_hive_metastore Removing 
+ Container dlh_hive_metastore Removed 
+ Container dlh_minio_init Stopping 
+ Container dlh_postgres Stopping 
+ Container dlh_minio_init Stopped 
+ Container dlh_minio_init Removing 
+ Container dlh_minio_init Removed 
+ Container dlh_minio Stopping 
+ Container dlh_minio Stopped 
+ Container dlh_minio Removing 
+ Container dlh_minio Removed 
+ Container dlh_postgres Stopped 
+ Container dlh_postgres Removing 
+ Container dlh_postgres Removed 
+ Volume artigo_dlh_airflow_logs Removing 
+ Volume artigo_dlh_minio_data Removing 
+ Volume artigo_dlh_airflow_plugins Removing 
+ Volume artigo_dlh_postgres_data Removing 
+ Network artigo_dlh_dlh_net Removing 
+ Volume artigo_dlh_airflow_logs Removed 
+ Volume artigo_dlh_minio_data Removed 
+ Volume artigo_dlh_postgres_data Removed 
+ Volume artigo_dlh_airflow_plugins Removed 
+ Network artigo_dlh_dlh_net Removed 
+[2026-07-21T19:17:51Z] --- reset: docker compose up -d (core, sem governance)
+ Network artigo_dlh_dlh_net Creating 
+ Network artigo_dlh_dlh_net Created 
+ Volume artigo_dlh_postgres_data Creating 
+ Volume artigo_dlh_postgres_data Created 
+ Volume artigo_dlh_minio_data Creating 
+ Volume artigo_dlh_minio_data Created 
+ Volume artigo_dlh_airflow_logs Creating 
+ Volume artigo_dlh_airflow_logs Created 
+ Volume artigo_dlh_airflow_plugins Creating 
+ Volume artigo_dlh_airflow_plugins Created 
+ Container dlh_minio Creating 
+ Container dlh_postgres Creating 
+ Container dlh_postgres Created 
+ Container dlh_airflow_init Creating 
+ Container dlh_minio Created 
+ Container dlh_minio_init Creating 
+ Container dlh_airflow_init Created 
+ Container dlh_airflow_scheduler Creating 
+ Container dlh_airflow_webserver Creating 
+ Container dlh_minio_init Created 
+ Container dlh_hive_metastore Creating 
+ Container dlh_hive_metastore Created 
+ Container dlh_trino Creating 
+ Container dlh_spark_master Creating 
+ Container dlh_airflow_webserver Created 
+ Container dlh_airflow_scheduler Created 
+ Container dlh_trino Created 
+ Container dlh_spark_master Created 
+ Container dlh_spark_worker Creating 
+ Container dlh_spark_worker Created 
+ Container dlh_postgres Starting 
+ Container dlh_minio Starting 
+ Container dlh_minio Started 
+ Container dlh_minio Waiting 
+ Container dlh_postgres Started 
+ Container dlh_postgres Waiting 
+ Container dlh_postgres Healthy 
+ Container dlh_airflow_init Starting 
+ Container dlh_airflow_init Started 
+ Container dlh_airflow_init Waiting 
+ Container dlh_airflow_init Waiting 
+ Container dlh_minio Healthy 
+ Container dlh_minio_init Starting 
+ Container dlh_minio_init Started 
+ Container dlh_postgres Waiting 
+ Container dlh_minio_init Waiting 
+ Container dlh_postgres Healthy 
+ Container dlh_minio_init Exited 
+ Container dlh_hive_metastore Starting 
+ Container dlh_hive_metastore Started 
+ Container dlh_hive_metastore Waiting 
+ Container dlh_hive_metastore Waiting 
+ Container dlh_airflow_init Exited 
+ Container dlh_airflow_webserver Starting 
+ Container dlh_airflow_init Exited 
+ Container dlh_airflow_scheduler Starting 
+ Container dlh_airflow_scheduler Started 
+ Container dlh_airflow_webserver Started 
+ Container dlh_hive_metastore Healthy 
+ Container dlh_spark_master Starting 
+ Container dlh_hive_metastore Healthy 
+ Container dlh_trino Starting 
+ Container dlh_trino Started 
+ Container dlh_spark_master Started 
+ Container dlh_spark_worker Starting 
+ Container dlh_spark_worker Started 
+[2026-07-21T19:18:44Z] --- stack pronta
+[2026-07-21T19:18:44Z] >>> Rodando V1_rep6 (lotes=2 registros=500 seed=6)
+== V1_rep6: gerando 2x500 (seed=6) ==
+
+Gerando 2 lote(s) x 500 registros para: ['gps', 'sensor', 'relt_intel', 'paf', 'obstaculo', 'seg_area', 'pessoal', 'material']
+
+  -> landing/gps/lote_20260721_191844_001.json (500 registros, 175724 bytes)
+  -> landing/gps/lote_20260721_191844_002.json (500 registros, 175669 bytes)
+  -> landing/sensor/lote_20260721_191844_001.json (500 registros, 197775 bytes)
+  -> landing/sensor/lote_20260721_191844_002.json (500 registros, 197717 bytes)
+  -> landing/relt_intel/lote_20260721_191844_001.json (500 registros, 252888 bytes)
+  -> landing/relt_intel/lote_20260721_191844_002.json (500 registros, 253644 bytes)
+  -> landing/paf/lote_20260721_191844_001.json (500 registros, 227346 bytes)
+  -> landing/paf/lote_20260721_191844_002.json (500 registros, 227313 bytes)
+  -> landing/obstaculo/lote_20260721_191844_001.json (500 registros, 225128 bytes)
+  -> landing/obstaculo/lote_20260721_191844_002.json (500 registros, 225140 bytes)
+  -> landing/seg_area/lote_20260721_191844_001.json (500 registros, 241910 bytes)
+  -> landing/seg_area/lote_20260721_191844_002.json (500 registros, 241911 bytes)
+  -> landing/pessoal/lote_20260721_191844_001.json (500 registros, 241552 bytes)
+  -> landing/pessoal/lote_20260721_191844_002.json (500 registros, 241596 bytes)
+  -> landing/material/lote_20260721_191844_001.json (500 registros, 179376 bytes)
+  -> landing/material/lote_20260721_191844_002.json (500 registros, 179424 bytes)
+
+Total enviado: 8000 registros -> MinIO landing/
+Agora dispare a DAG 'dag_ingestao_bronze' no Airflow.
+
+/home/airflow/.local/lib/python3.10/site-packages/openlineage/client/transport/kafka.py:12 UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  dag_ingestao_bronze OK (26.440s)
+/home/airflow/.local/lib/python3.10/site-packages/openlineage/client/transport/kafka.py:12 UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  dag_silver_transform OK (199.792s)
+/home/airflow/.local/lib/python3.10/site-packages/openlineage/client/transport/kafka.py:12 UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  dag_gold_refresh OK (125.075s)
+== V1_rep6 concluido ==
+Metricas Trino coletadas para tag=V1_rep6
+[2026-07-21T19:25:03Z] <<< V1_rep6: OK
+[2026-07-21T19:25:03Z] --- reset: docker compose down -v
+ Container dlh_airflow_scheduler Stopping 
+ Container dlh_trino Stopping 
+ Container dlh_spark_worker Stopping 
+ Container dlh_airflow_webserver Stopping 
+ Container dlh_trino Stopped 
+ Container dlh_trino Removing 
+ Container dlh_trino Removed 
+ Container dlh_spark_worker Stopped 
+ Container dlh_spark_worker Removing 
+ Container dlh_spark_worker Removed 
+ Container dlh_spark_master Stopping 
+ Container dlh_spark_master Stopped 
+ Container dlh_spark_master Removing 
+ Container dlh_spark_master Removed 
+ Container dlh_hive_metastore Stopping 
+ Container dlh_airflow_scheduler Stopped 
+ Container dlh_airflow_scheduler Removing 
+ Container dlh_airflow_scheduler Removed 
+ Container dlh_airflow_webserver Stopped 
+ Container dlh_airflow_webserver Removing 
+ Container dlh_airflow_webserver Removed 
+ Container dlh_airflow_init Stopping 
+ Container dlh_airflow_init Stopped 
+ Container dlh_airflow_init Removing 
+ Container dlh_airflow_init Removed 
+ Container dlh_hive_metastore Stopped 
+ Container dlh_hive_metastore Removing 
+ Container dlh_hive_metastore Removed 
+ Container dlh_minio_init Stopping 
+ Container dlh_postgres Stopping 
+ Container dlh_minio_init Stopped 
+ Container dlh_minio_init Removing 
+ Container dlh_minio_init Removed 
+ Container dlh_minio Stopping 
+ Container dlh_minio Stopped 
+ Container dlh_minio Removing 
+ Container dlh_minio Removed 
+ Container dlh_postgres Stopped 
+ Container dlh_postgres Removing 
+ Container dlh_postgres Removed 
+ Volume artigo_dlh_airflow_plugins Removing 
+ Volume artigo_dlh_postgres_data Removing 
+ Volume artigo_dlh_airflow_logs Removing 
+ Volume artigo_dlh_minio_data Removing 
+ Network artigo_dlh_dlh_net Removing 
+ Volume artigo_dlh_postgres_data Removed 
+ Volume artigo_dlh_airflow_logs Removed 
+ Volume artigo_dlh_minio_data Removed 
+ Volume artigo_dlh_airflow_plugins Removed 
+ Network artigo_dlh_dlh_net Removed 
+[2026-07-21T19:25:15Z] --- reset: docker compose up -d (core, sem governance)
+ Network artigo_dlh_dlh_net Creating 
+ Network artigo_dlh_dlh_net Created 
+ Volume artigo_dlh_airflow_logs Creating 
+ Volume artigo_dlh_airflow_logs Created 
+ Volume artigo_dlh_airflow_plugins Creating 
+ Volume artigo_dlh_airflow_plugins Created 
+ Volume artigo_dlh_minio_data Creating 
+ Volume artigo_dlh_minio_data Created 
+ Volume artigo_dlh_postgres_data Creating 
+ Volume artigo_dlh_postgres_data Created 
+ Container dlh_minio Creating 
+ Container dlh_postgres Creating 
+ Container dlh_minio Created 
+ Container dlh_minio_init Creating 
+ Container dlh_postgres Created 
+ Container dlh_airflow_init Creating 
+ Container dlh_minio_init Created 
+ Container dlh_hive_metastore Creating 
+ Container dlh_airflow_init Created 
+ Container dlh_airflow_webserver Creating 
+ Container dlh_airflow_scheduler Creating 
+ Container dlh_hive_metastore Created 
+ Container dlh_trino Creating 
+ Container dlh_spark_master Creating 
+ Container dlh_airflow_webserver Created 
+ Container dlh_airflow_scheduler Created 
+ Container dlh_spark_master Created 
+ Container dlh_spark_worker Creating 
+ Container dlh_trino Created 
+ Container dlh_spark_worker Created 
+ Container dlh_minio Starting 
+ Container dlh_postgres Starting 
+ Container dlh_minio Started 
+ Container dlh_minio Waiting 
+ Container dlh_postgres Started 
+ Container dlh_postgres Waiting 
+ Container dlh_postgres Healthy 
+ Container dlh_airflow_init Starting 
+ Container dlh_airflow_init Started 
+ Container dlh_airflow_init Waiting 
+ Container dlh_airflow_init Waiting 
+ Container dlh_minio Healthy 
+ Container dlh_minio_init Starting 
+ Container dlh_minio_init Started 
+ Container dlh_minio_init Waiting 
+ Container dlh_postgres Waiting 
+ Container dlh_minio_init Exited 
+ Container dlh_postgres Healthy 
+ Container dlh_hive_metastore Starting 
+ Container dlh_hive_metastore Started 
+ Container dlh_hive_metastore Waiting 
+ Container dlh_hive_metastore Waiting 
+ Container dlh_airflow_init Exited 
+ Container dlh_airflow_scheduler Starting 
+ Container dlh_airflow_init Exited 
+ Container dlh_airflow_webserver Starting 
+ Container dlh_airflow_webserver Started 
+ Container dlh_airflow_scheduler Started 
+ Container dlh_hive_metastore Healthy 
+ Container dlh_spark_master Starting 
+ Container dlh_hive_metastore Healthy 
+ Container dlh_trino Starting 
+ Container dlh_trino Started 
+ Container dlh_spark_master Started 
+ Container dlh_spark_worker Starting 
+ Container dlh_spark_worker Started 
+[2026-07-21T19:26:08Z] --- stack pronta
+[2026-07-21T19:26:08Z] >>> Rodando V1_rep7 (lotes=2 registros=500 seed=7)
+== V1_rep7: gerando 2x500 (seed=7) ==
+
+Gerando 2 lote(s) x 500 registros para: ['gps', 'sensor', 'relt_intel', 'paf', 'obstaculo', 'seg_area', 'pessoal', 'material']
+
+  -> landing/gps/lote_20260721_192608_001.json (500 registros, 175720 bytes)
+  -> landing/gps/lote_20260721_192608_002.json (500 registros, 175691 bytes)
+  -> landing/sensor/lote_20260721_192608_001.json (500 registros, 197739 bytes)
+  -> landing/sensor/lote_20260721_192608_002.json (500 registros, 197738 bytes)
+  -> landing/relt_intel/lote_20260721_192608_001.json (500 registros, 252808 bytes)
+  -> landing/relt_intel/lote_20260721_192608_002.json (500 registros, 252494 bytes)
+  -> landing/paf/lote_20260721_192608_001.json (500 registros, 227402 bytes)
+  -> landing/paf/lote_20260721_192608_002.json (500 registros, 227422 bytes)
+  -> landing/obstaculo/lote_20260721_192608_001.json (500 registros, 225471 bytes)
+  -> landing/obstaculo/lote_20260721_192609_002.json (500 registros, 225014 bytes)
+  -> landing/seg_area/lote_20260721_192609_001.json (500 registros, 241758 bytes)
+  -> landing/seg_area/lote_20260721_192609_002.json (500 registros, 242135 bytes)
+  -> landing/pessoal/lote_20260721_192609_001.json (500 registros, 241633 bytes)
+  -> landing/pessoal/lote_20260721_192609_002.json (500 registros, 241355 bytes)
+  -> landing/material/lote_20260721_192609_001.json (500 registros, 179461 bytes)
+  -> landing/material/lote_20260721_192609_002.json (500 registros, 179263 bytes)
+
+Total enviado: 8000 registros -> MinIO landing/
+Agora dispare a DAG 'dag_ingestao_bronze' no Airflow.
+
+/home/airflow/.local/lib/python3.10/site-packages/openlineage/client/transport/kafka.py:12 UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  dag_ingestao_bronze OK (26.114s)
+/home/airflow/.local/lib/python3.10/site-packages/openlineage/client/transport/kafka.py:12 UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  dag_silver_transform OK (191.665s)
+/home/airflow/.local/lib/python3.10/site-packages/openlineage/client/transport/kafka.py:12 UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  dag_gold_refresh OK (131.194s)
+== V1_rep7 concluido ==
+Metricas Trino coletadas para tag=V1_rep7
+[2026-07-21T19:32:26Z] <<< V1_rep7: OK
+[2026-07-21T19:32:26Z] --- reset: docker compose down -v
+ Container dlh_airflow_scheduler Stopping 
+ Container dlh_trino Stopping 
+ Container dlh_spark_worker Stopping 
+ Container dlh_airflow_webserver Stopping 
+ Container dlh_trino Stopped 
+ Container dlh_trino Removing 
+ Container dlh_trino Removed 
+ Container dlh_spark_worker Stopped 
+ Container dlh_spark_worker Removing 
+ Container dlh_spark_worker Removed 
+ Container dlh_spark_master Stopping 
+ Container dlh_spark_master Stopped 
+ Container dlh_spark_master Removing 
+ Container dlh_spark_master Removed 
+ Container dlh_hive_metastore Stopping 
+ Container dlh_airflow_scheduler Stopped 
+ Container dlh_airflow_scheduler Removing 
+ Container dlh_airflow_scheduler Removed 
+ Container dlh_airflow_webserver Stopped 
+ Container dlh_airflow_webserver Removing 
+ Container dlh_airflow_webserver Removed 
+ Container dlh_airflow_init Stopping 
+ Container dlh_airflow_init Stopped 
+ Container dlh_airflow_init Removing 
+ Container dlh_airflow_init Removed 
+ Container dlh_hive_metastore Stopped 
+ Container dlh_hive_metastore Removing 
+ Container dlh_hive_metastore Removed 
+ Container dlh_postgres Stopping 
+ Container dlh_minio_init Stopping 
+ Container dlh_minio_init Stopped 
+ Container dlh_minio_init Removing 
+ Container dlh_minio_init Removed 
+ Container dlh_minio Stopping 
+ Container dlh_minio Stopped 
+ Container dlh_minio Removing 
+ Container dlh_minio Removed 
+ Container dlh_postgres Stopped 
+ Container dlh_postgres Removing 
+ Container dlh_postgres Removed 
+ Volume artigo_dlh_airflow_logs Removing 
+ Volume artigo_dlh_airflow_plugins Removing 
+ Volume artigo_dlh_minio_data Removing 
+ Volume artigo_dlh_postgres_data Removing 
+ Network artigo_dlh_dlh_net Removing 
+ Volume artigo_dlh_airflow_logs Removed 
+ Volume artigo_dlh_airflow_plugins Removed 
+ Volume artigo_dlh_postgres_data Removed 
+ Volume artigo_dlh_minio_data Removed 
+ Network artigo_dlh_dlh_net Removed 
+[2026-07-21T19:32:39Z] --- reset: docker compose up -d (core, sem governance)
+ Network artigo_dlh_dlh_net Creating 
+ Network artigo_dlh_dlh_net Created 
+ Volume artigo_dlh_airflow_plugins Creating 
+ Volume artigo_dlh_airflow_plugins Created 
+ Volume artigo_dlh_minio_data Creating 
+ Volume artigo_dlh_minio_data Created 
+ Volume artigo_dlh_postgres_data Creating 
+ Volume artigo_dlh_postgres_data Created 
+ Volume artigo_dlh_airflow_logs Creating 
+ Volume artigo_dlh_airflow_logs Created 
+ Container dlh_minio Creating 
+ Container dlh_postgres Creating 
+ Container dlh_postgres Created 
+ Container dlh_minio Created 
+ Container dlh_minio_init Creating 
+ Container dlh_airflow_init Creating 
+ Container dlh_minio_init Created 
+ Container dlh_hive_metastore Creating 
+ Container dlh_airflow_init Created 
+ Container dlh_airflow_scheduler Creating 
+ Container dlh_airflow_webserver Creating 
+ Container dlh_hive_metastore Created 
+ Container dlh_trino Creating 
+ Container dlh_spark_master Creating 
+ Container dlh_airflow_scheduler Created 
+ Container dlh_airflow_webserver Created 
+ Container dlh_spark_master Created 
+ Container dlh_spark_worker Creating 
+ Container dlh_trino Created 
+ Container dlh_spark_worker Created 
+ Container dlh_postgres Starting 
+ Container dlh_minio Starting 
+ Container dlh_minio Started 
+ Container dlh_minio Waiting 
+ Container dlh_postgres Started 
+ Container dlh_postgres Waiting 
+ Container dlh_postgres Healthy 
+ Container dlh_airflow_init Starting 
+ Container dlh_airflow_init Started 
+ Container dlh_airflow_init Waiting 
+ Container dlh_airflow_init Waiting 
+ Container dlh_minio Healthy 
+ Container dlh_minio_init Starting 
+ Container dlh_minio_init Started 
+ Container dlh_postgres Waiting 
+ Container dlh_minio_init Waiting 
+ Container dlh_minio_init Exited 
+ Container dlh_postgres Healthy 
+ Container dlh_hive_metastore Starting 
+ Container dlh_hive_metastore Started 
+ Container dlh_hive_metastore Waiting 
+ Container dlh_hive_metastore Waiting 
+ Container dlh_airflow_init Exited 
+ Container dlh_airflow_scheduler Starting 
+ Container dlh_airflow_init Exited 
+ Container dlh_airflow_webserver Starting 
+ Container dlh_airflow_scheduler Started 
+ Container dlh_airflow_webserver Started 
+ Container dlh_hive_metastore Healthy 
+ Container dlh_trino Starting 
+ Container dlh_hive_metastore Healthy 
+ Container dlh_spark_master Starting 
+ Container dlh_trino Started 
+ Container dlh_spark_master Started 
+ Container dlh_spark_worker Starting 
+ Container dlh_spark_worker Started 
+[2026-07-21T19:33:31Z] --- stack pronta
+[2026-07-21T19:33:31Z] >>> Rodando V1_rep8 (lotes=2 registros=500 seed=8)
+== V1_rep8: gerando 2x500 (seed=8) ==
+
+Gerando 2 lote(s) x 500 registros para: ['gps', 'sensor', 'relt_intel', 'paf', 'obstaculo', 'seg_area', 'pessoal', 'material']
+
+  -> landing/gps/lote_20260721_193331_001.json (500 registros, 175645 bytes)
+  -> landing/gps/lote_20260721_193331_002.json (500 registros, 175665 bytes)
+  -> landing/sensor/lote_20260721_193331_001.json (500 registros, 197686 bytes)
+  -> landing/sensor/lote_20260721_193331_002.json (500 registros, 197655 bytes)
+  -> landing/relt_intel/lote_20260721_193331_001.json (500 registros, 254333 bytes)
+  -> landing/relt_intel/lote_20260721_193331_002.json (500 registros, 253877 bytes)
+  -> landing/paf/lote_20260721_193331_001.json (500 registros, 227449 bytes)
+  -> landing/paf/lote_20260721_193331_002.json (500 registros, 227438 bytes)
+  -> landing/obstaculo/lote_20260721_193331_001.json (500 registros, 225282 bytes)
+  -> landing/obstaculo/lote_20260721_193332_002.json (500 registros, 225442 bytes)
+  -> landing/seg_area/lote_20260721_193332_001.json (500 registros, 242048 bytes)
+  -> landing/seg_area/lote_20260721_193332_002.json (500 registros, 241938 bytes)
+  -> landing/pessoal/lote_20260721_193332_001.json (500 registros, 241459 bytes)
+  -> landing/pessoal/lote_20260721_193332_002.json (500 registros, 241566 bytes)
+  -> landing/material/lote_20260721_193332_001.json (500 registros, 179402 bytes)
+  -> landing/material/lote_20260721_193332_002.json (500 registros, 179380 bytes)
+
+Total enviado: 8000 registros -> MinIO landing/
+Agora dispare a DAG 'dag_ingestao_bronze' no Airflow.
+
+/home/airflow/.local/lib/python3.10/site-packages/openlineage/client/transport/kafka.py:12 UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  dag_ingestao_bronze OK (26.191s)
+/home/airflow/.local/lib/python3.10/site-packages/openlineage/client/transport/kafka.py:12 UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  dag_silver_transform OK (200.181s)
+/home/airflow/.local/lib/python3.10/site-packages/openlineage/client/transport/kafka.py:12 UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  dag_gold_refresh OK (125.863s)
+== V1_rep8 concluido ==
+Metricas Trino coletadas para tag=V1_rep8
+[2026-07-21T19:39:53Z] <<< V1_rep8: OK
+[2026-07-21T19:39:53Z] --- reset: docker compose down -v
+ Container dlh_spark_worker Stopping 
+ Container dlh_trino Stopping 
+ Container dlh_airflow_webserver Stopping 
+ Container dlh_airflow_scheduler Stopping 
+ Container dlh_trino Stopped 
+ Container dlh_trino Removing 
+ Container dlh_trino Removed 
+ Container dlh_spark_worker Stopped 
+ Container dlh_spark_worker Removing 
+ Container dlh_spark_worker Removed 
+ Container dlh_spark_master Stopping 
+ Container dlh_spark_master Stopped 
+ Container dlh_spark_master Removing 
+ Container dlh_spark_master Removed 
+ Container dlh_hive_metastore Stopping 
+ Container dlh_airflow_scheduler Stopped 
+ Container dlh_airflow_scheduler Removing 
+ Container dlh_airflow_scheduler Removed 
+ Container dlh_airflow_webserver Stopped 
+ Container dlh_airflow_webserver Removing 
+ Container dlh_airflow_webserver Removed 
+ Container dlh_airflow_init Stopping 
+ Container dlh_airflow_init Stopped 
+ Container dlh_airflow_init Removing 
+ Container dlh_airflow_init Removed 
+ Container dlh_hive_metastore Stopped 
+ Container dlh_hive_metastore Removing 
+ Container dlh_hive_metastore Removed 
+ Container dlh_minio_init Stopping 
+ Container dlh_postgres Stopping 
+ Container dlh_minio_init Stopped 
+ Container dlh_minio_init Removing 
+ Container dlh_minio_init Removed 
+ Container dlh_minio Stopping 
+ Container dlh_minio Stopped 
+ Container dlh_minio Removing 
+ Container dlh_minio Removed 
+ Container dlh_postgres Stopped 
+ Container dlh_postgres Removing 
+ Container dlh_postgres Removed 
+ Volume artigo_dlh_minio_data Removing 
+ Volume artigo_dlh_airflow_plugins Removing 
+ Volume artigo_dlh_postgres_data Removing 
+ Volume artigo_dlh_airflow_logs Removing 
+ Network artigo_dlh_dlh_net Removing 
+ Volume artigo_dlh_airflow_plugins Removed 
+ Volume artigo_dlh_minio_data Removed 
+ Volume artigo_dlh_airflow_logs Removed 
+ Volume artigo_dlh_postgres_data Removed 
+ Network artigo_dlh_dlh_net Removed 
+[2026-07-21T19:40:06Z] --- reset: docker compose up -d (core, sem governance)
+ Network artigo_dlh_dlh_net Creating 
+ Network artigo_dlh_dlh_net Created 
+ Volume artigo_dlh_airflow_logs Creating 
+ Volume artigo_dlh_airflow_logs Created 
+ Volume artigo_dlh_airflow_plugins Creating 
+ Volume artigo_dlh_airflow_plugins Created 
+ Volume artigo_dlh_postgres_data Creating 
+ Volume artigo_dlh_postgres_data Created 
+ Volume artigo_dlh_minio_data Creating 
+ Volume artigo_dlh_minio_data Created 
+ Container dlh_minio Creating 
+ Container dlh_postgres Creating 
+ Container dlh_minio Created 
+ Container dlh_minio_init Creating 
+ Container dlh_postgres Created 
+ Container dlh_airflow_init Creating 
+ Container dlh_minio_init Created 
+ Container dlh_hive_metastore Creating 
+ Container dlh_airflow_init Created 
+ Container dlh_airflow_scheduler Creating 
+ Container dlh_airflow_webserver Creating 
+ Container dlh_hive_metastore Created 
+ Container dlh_trino Creating 
+ Container dlh_spark_master Creating 
+ Container dlh_airflow_scheduler Created 
+ Container dlh_airflow_webserver Created 
+ Container dlh_trino Created 
+ Container dlh_spark_master Created 
+ Container dlh_spark_worker Creating 
+ Container dlh_spark_worker Created 
+ Container dlh_minio Starting 
+ Container dlh_postgres Starting 
+ Container dlh_minio Started 
+ Container dlh_minio Waiting 
+ Container dlh_postgres Started 
+ Container dlh_postgres Waiting 
+ Container dlh_postgres Healthy 
+ Container dlh_airflow_init Starting 
+ Container dlh_airflow_init Started 
+ Container dlh_airflow_init Waiting 
+ Container dlh_airflow_init Waiting 
+ Container dlh_minio Healthy 
+ Container dlh_minio_init Starting 
+ Container dlh_minio_init Started 
+ Container dlh_postgres Waiting 
+ Container dlh_minio_init Waiting 
+ Container dlh_postgres Healthy 
+ Container dlh_minio_init Exited 
+ Container dlh_hive_metastore Starting 
+ Container dlh_hive_metastore Started 
+ Container dlh_hive_metastore Waiting 
+ Container dlh_hive_metastore Waiting 
+ Container dlh_airflow_init Exited 
+ Container dlh_airflow_webserver Starting 
+ Container dlh_airflow_init Exited 
+ Container dlh_airflow_scheduler Starting 
+ Container dlh_airflow_webserver Started 
+ Container dlh_airflow_scheduler Started 
+ Container dlh_hive_metastore Healthy 
+ Container dlh_spark_master Starting 
+ Container dlh_hive_metastore Healthy 
+ Container dlh_trino Starting 
+ Container dlh_trino Started 
+ Container dlh_spark_master Started 
+ Container dlh_spark_worker Starting 
+ Container dlh_spark_worker Started 
+[2026-07-21T19:40:58Z] --- stack pronta
+[2026-07-21T19:40:58Z] >>> Rodando V1_rep9 (lotes=2 registros=500 seed=9)
+== V1_rep9: gerando 2x500 (seed=9) ==
+
+Gerando 2 lote(s) x 500 registros para: ['gps', 'sensor', 'relt_intel', 'paf', 'obstaculo', 'seg_area', 'pessoal', 'material']
+
+  -> landing/gps/lote_20260721_194058_001.json (500 registros, 175726 bytes)
+  -> landing/gps/lote_20260721_194058_002.json (500 registros, 175640 bytes)
+  -> landing/sensor/lote_20260721_194058_001.json (500 registros, 197667 bytes)
+  -> landing/sensor/lote_20260721_194058_002.json (500 registros, 197644 bytes)
+  -> landing/relt_intel/lote_20260721_194059_001.json (500 registros, 253462 bytes)
+  -> landing/relt_intel/lote_20260721_194059_002.json (500 registros, 253052 bytes)
+  -> landing/paf/lote_20260721_194059_001.json (500 registros, 227396 bytes)
+  -> landing/paf/lote_20260721_194059_002.json (500 registros, 227781 bytes)
+  -> landing/obstaculo/lote_20260721_194059_001.json (500 registros, 225177 bytes)
+  -> landing/obstaculo/lote_20260721_194059_002.json (500 registros, 225190 bytes)
+  -> landing/seg_area/lote_20260721_194059_001.json (500 registros, 242051 bytes)
+  -> landing/seg_area/lote_20260721_194059_002.json (500 registros, 241891 bytes)
+  -> landing/pessoal/lote_20260721_194059_001.json (500 registros, 241667 bytes)
+  -> landing/pessoal/lote_20260721_194059_002.json (500 registros, 241847 bytes)
+  -> landing/material/lote_20260721_194059_001.json (500 registros, 179325 bytes)
+  -> landing/material/lote_20260721_194059_002.json (500 registros, 179630 bytes)
+
+Total enviado: 8000 registros -> MinIO landing/
+Agora dispare a DAG 'dag_ingestao_bronze' no Airflow.
+
+/home/airflow/.local/lib/python3.10/site-packages/openlineage/client/transport/kafka.py:12 UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.

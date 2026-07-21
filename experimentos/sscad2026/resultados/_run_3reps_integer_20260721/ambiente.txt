@@ -1,0 +1,35 @@
+data_inicio_utc: 2026-07-21T13:18:41Z
+
+--- CPU ---
+CPU(s):                                    20
+Thread(s) per núcleo:                      2
+
+--- Memoria ---
+               total       usada       livre    compart.  buff/cache  disponível
+Mem.:           31Gi        13Gi       6,8Gi       1,0Gi        11Gi        17Gi
+Swap:          2,0Gi          0B       2,0Gi
+
+--- Disco (repo) ---
+Sist. Arq.      Tam. Usado Disp. Uso% Montado em
+/dev/nvme0n1p2  468G  336G  109G  76% /
+
+--- Docker ---
+Docker version 29.1.3, build 29.1.3-0ubuntu3~24.04.2
+Docker Compose version v5.3.1
+
+--- SO ---
+Linux saiti-HP-Elite-SFF-600-G9-Desktop-PC 6.8.0-134-generic #134-Ubuntu SMP PREEMPT_DYNAMIC Fri Jun 26 18:43:11 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+
+--- Imagens da stack ---
+CONTAINER               REPOSITORY                     TAG                 PLATFORM            IMAGE ID            SIZE                CREATED
+dlh_airflow_init        artigo_dlh-airflow-init        latest              linux/amd64         0c3d11a060c7        3.13GB              2 months ago
+dlh_airflow_scheduler   artigo_dlh-airflow-scheduler   latest              linux/amd64         ce32058cbd66        3.13GB              2 months ago
+dlh_airflow_webserver   artigo_dlh-airflow-webserver   latest              linux/amd64         9ac36509ea67        3.13GB              2 months ago
+dlh_hive_metastore      naushadh/hive-metastore        latest              linux/amd64         7b315e7d7e9c        1.02GB              23 months ago
+dlh_minio               minio/minio                    latest              linux/amd64         69b2ec208575        175MB               10 months ago
+dlh_minio_init          minio/mc                       latest              linux/amd64         c2ad77420d33        84.9MB              10 months ago
+dlh_postgres            postgres                       15                  linux/amd64         a116b2156a68        445MB               3 months ago
+dlh_spark_master        artigo_dlh-spark-master        latest              linux/amd64         405f2ba93d0e        1.52GB              About an hour ago
+dlh_spark_worker        artigo_dlh-spark-worker        latest              linux/amd64         344351e09b3f        1.52GB              About an hour ago
+dlh_trino               trinodb/trino                  437                 linux/amd64         68d22a8850b3        1.27GB              2 years ago
+data_fim_utc: 2026-07-21T15:49:49Z

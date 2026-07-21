@@ -1,0 +1,9 @@
+tipo,registros_bronze_tipo,registros_silver,taxa_dedup_pct,n_arquivos,tamanho_mb,n_snapshots
+gps,100000.0,100000,0.0,7,2.542,2
+sensor,100000.0,105,99.895,7,0.043,2
+relt_intel,100000.0,100000,0.0,7,6.38,2
+paf,100000.0,100000,0.0,7,4.249,2
+obstaculo,100000.0,100000,0.0,7,4.422,2
+seg_area,100000.0,100000,0.0,7,4.275,2
+pessoal,100000.0,100000,0.0,7,3.05,2
+material,100000.0,100000,0.0,7,0.953,2
