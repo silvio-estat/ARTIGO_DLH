@@ -36,3 +36,4 @@ dlh_postgres                 postgres                                        15 
 dlh_spark_master             artigo_dlh-spark-master                         latest              linux/amd64         405f2ba93d0e        1.52GB              7 hours ago
 dlh_spark_worker             artigo_dlh-spark-worker                         latest              linux/amd64         344351e09b3f        1.52GB              7 hours ago
 dlh_trino                    trinodb/trino                                   437                 linux/amd64         68d22a8850b3        1.27GB              2 years ago
+data_fim_utc: 2026-07-22T04:58:42Z
