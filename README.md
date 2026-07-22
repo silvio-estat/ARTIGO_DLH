@@ -115,13 +115,9 @@ docker compose --profile governance up -d
 python scripts/setup_om_bot_token.py
 ```
 
-Esse script busca o JWT do `ingestion-bot` e cadastra o serviço `trino_lakehouse` no OpenMetadata via API, preenchendo `OM_INGESTION_BOT_JWT` no `.env` automaticamente — sem isso, `dag_trino_governance` e a emissão de linhagem falham. Depois, **recrie** (não `restart`) os containers do Airflow para o novo `.env` ser lido:
+Esse script busca o JWT do `ingestion-bot`, cadastra o serviço `trino_lakehouse` no OpenMetadata via API preenchendo `OM_INGESTION_BOT_JWT` no `.env`, e **já recria os containers do Airflow** para que releiam o `.env` novo — sem isso, `dag_trino_governance` e a emissão de linhagem falham. (Esse último passo era manual e fácil de esquecer: `restart` mantém o ambiente antigo do container, só recriar relê o `.env`; por isso o script faz sozinho. Se o `docker` não estiver no PATH, ele imprime o comando para você rodar à mão.)
 
-```bash
-docker compose up -d airflow-webserver airflow-scheduler
-```
-
-(`restart` mantém o ambiente antigo do container — só `up -d` relê o `.env`.)
+O script é idempotente — se você resetou o volume do OpenMetadata (`docker compose down -v`, que apaga o bot token e os serviços cadastrados), basta rodá-lo de novo.
 
 Com isso, `dag_trino_governance` (disparo manual) já roda ingestão de metadados → profiler → testes de qualidade → sample data:
 

@@ -11,6 +11,10 @@ Faz os dois passos manuais que, se pulados, quebram a DAG num clone novo do repo
 
 Ambos usam o login de admin (credenciais fixas de dev, ver credenciais/credenciais-exemplo.md).
 
+Ao final, recria os containers do Airflow para que releiam o .env novo — esse é o
+passo que, se esquecido, mantém o token velho no container e faz a DAG falhar com
+"The given token does not match the current bot's token" (`restart` NÃO basta).
+
 Uso (após `docker compose --profile governance up -d` e OpenMetadata de pé,
 ~3 min no primeiro boot):
     python scripts/setup_om_bot_token.py
@@ -21,6 +25,8 @@ que apaga o volume do OpenMetadata e portanto o bot token e os serviços cadastr
 import base64
 import json
 import re
+import shutil
+import subprocess
 import sys
 import urllib.error
 import urllib.request
@@ -135,11 +141,36 @@ def main():
 
     _garantir_servico_trino(token_admin)
 
-    print(
-        "\nRecrie os containers do Airflow para aplicar o novo .env "
-        "(`restart` NÃO relê o .env, precisa recriar o container):"
-    )
-    print("  docker compose up -d airflow-webserver airflow-scheduler")
+    _recriar_airflow()
+
+
+def _recriar_airflow():
+    """Recria os containers do Airflow para que releiam o .env novo.
+
+    Esse é o passo que, se esquecido, mantém o token velho dentro do container e
+    faz a DAG falhar com 'The given token does not match the current bot's token'
+    (`restart` NÃO relê o .env — só recriar o container). Por isso o script já o
+    executa; se o docker não estiver acessível, imprime o comando manual.
+    """
+    cmd = [
+        "docker", "compose", "up", "-d", "--force-recreate",
+        "airflow-webserver", "airflow-scheduler",
+    ]
+    manual = "  " + " ".join(cmd)
+
+    if shutil.which("docker") is None:
+        print("\nAVISO: 'docker' não encontrado no PATH. Recrie os containers do Airflow manualmente:")
+        print(manual)
+        return
+
+    repo_root = ENV_PATH.parent
+    print("\nRecriando os containers do Airflow para aplicar o novo .env...")
+    try:
+        subprocess.run(cmd, cwd=repo_root, check=True)
+        print("OK — Airflow recriado com o token atual.")
+    except (subprocess.CalledProcessError, OSError) as e:
+        print(f"\nAVISO: não consegui recriar os containers automaticamente ({e}). Rode manualmente:")
+        print(manual)
 
 
 if __name__ == "__main__":
