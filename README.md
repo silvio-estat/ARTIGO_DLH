@@ -13,6 +13,7 @@ Protótipo que implementa uma plataforma Lakehouse — MinIO (S3) + Apache Icebe
   4. [Gerar dados sintéticos e rodar o pipeline](#4-gerar-dados-sintéticos-e-rodar-o-pipeline)
   5. [Perfil governance (opcional) — OpenMetadata](#5-perfil-governance-opcional--openmetadata)
   6. [Notebook de exemplo — consultas via Trino](#6-notebook-de-exemplo--consultas-via-trino)
+  7. [Relatório de experimentos — avaliação quantitativa](#7-relatório-de-experimentos--avaliação-quantitativa)
 - [Coisas que pegam desprevenido](#coisas-que-pegam-desprevenido)
 - [Credenciais](#credenciais)
 
@@ -132,7 +133,7 @@ OpenMetadata fica em http://localhost:8585 (`admin@open-metadata.org` / `admin`)
 
 ### 6. Notebook de exemplo — consultas via Trino
 
-`exemplo_consulta_trino/consulta_pitcic.ipynb` mostra como consultar o Lakehouse direto do Python usando o cliente Trino, com a visão `gold.pitcic` como exemplo: consultas diretas no Trino (agregação, filtro, `JOIN` entre camadas, e até um exemplo de time-travel usando o histórico de snapshots do Iceberg), o padrão inverso de baixar tudo para um `DataFrame` pandas e analisar localmente, e alguns gráficos com `matplotlib`.
+`exemplo_consulta_trino/consulta_pitcic.ipynb` mostra como consultar o Lakehouse direto do Python usando o cliente Trino, com a visão `gold.pitcic` como exemplo: consultas diretas no Trino (agregação, filtro e `JOIN` entre camadas), o padrão inverso de baixar tudo para um `DataFrame` pandas e analisar localmente, e alguns gráficos com `matplotlib`. (Os recursos específicos do formato Iceberg — snapshots, *time travel*, evolução de schema — ficam no relatório de experimentos, [passo 7](#7-relatório-de-experimentos--avaliação-quantitativa).)
 
 ```bash
 ./venv/Scripts/python.exe -m pip install -r requirements.txt
@@ -141,6 +142,25 @@ OpenMetadata fica em http://localhost:8585 (`admin@open-metadata.org` / `admin`)
 ```
 
 Abra o notebook e selecione o kernel **Python (Lakehouse venv)**. Requer a `gold.pitcic` já populada (passo 4) — sem isso as consultas rodam mas retornam vazio.
+
+### 7. Relatório de experimentos — avaliação quantitativa
+
+`experimentos/sscad2026/relatorio_experimento.ipynb` é a avaliação quantitativa da PoC (artigo SSCAD 2026). Reúne dois experimentos, cada um com 12 repetições e reset total da stack entre elas, reportando desvio-padrão e IC 95% (t de Student):
+
+- **E1 — escalabilidade com o volume**: como a duração de cada DAG (Bronze/Silver/Gold) cresce ao variar o volume em duas ordens de grandeza (V1=8k → V2=80k → V3=800k registros).
+- **E2 — speedup com paralelismo**: quanto a `dag_silver_transform` acelera com 1/2/4 cores do Spark (volume fixo V3).
+
+Fecha com uma seção **"Recursos do Iceberg (demonstração ao vivo)"** que consulta o Trino em tempo real para mostrar como o formato de tabela funciona na prática — histórico de snapshots, *time travel*, metadados por arquivo/partição e evolução de schema sem reescrita.
+
+Os dados vêm do protocolo `scripts/orquestrar_protocolo.sh` (retomável, ~8,4 min por repetição; a env var `REPS` controla o número de repetições, padrão 12), que grava os CSVs em `experimentos/sscad2026/resultados/`. Com os CSVs no lugar, regenere o relatório:
+
+```bash
+./scripts/orquestrar_protocolo.sh          # coleta as métricas E1 + E2 (demorado)
+cd experimentos/sscad2026
+../../venv/bin/python3 -m jupyter nbconvert --to notebook --execute --inplace relatorio_experimento.ipynb
+```
+
+A avaliação E1/E2 é reproduzível **offline**, só a partir dos CSVs coletados; apenas a seção final de recursos do Iceberg consulta o Trino ao vivo e exige a stack no ar (passos 2–4).
 
 ## Coisas que pegam desprevenido
 
